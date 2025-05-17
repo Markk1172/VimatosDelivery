@@ -2,7 +2,7 @@ from django.urls import path
 from .views import AplicarDescontoPizzaView
 from .views import (
     FuncionarioListCreate, ClienteListCreate, MotoboyListCreate,
-    PizzaListCreate, BebidaListCreate, TaxaEntregaListCreate
+    PizzaListCreate, BebidaListCreate, TaxaEntregaListCreate, buscar_cep_api
 )
 
 urlpatterns = [
@@ -13,5 +13,5 @@ urlpatterns = [
     path('bebidas/', BebidaListCreate.as_view(), name='bebida-list-create'),
     path('taxas-entrega/', TaxaEntregaListCreate.as_view(), name='taxa-entrega-list-create'),
     path('pizzas/<int:pk>/aplicar-desconto/', AplicarDescontoPizzaView.as_view(), name='aplicar-desconto-pizza'),
-    
+    path('buscar-cep/', buscar_cep_api, name='buscar_cep_api')
 ]

@@ -6,7 +6,8 @@ from rest_framework.permissions import IsAuthenticated
 from .permissions import IsFuncionario
 from .models import Funcionario, Motoboy, Pizza, Bebida, Cliente, TaxaEntrega
 from .serializers import FuncionarioSerializer, MotoboySerializer, PizzaSerializer, BebidaSerializer, ClienteSerializer, TaxaEntregaSerializer
-
+import requests
+from django.http import JsonResponse
 
 class FuncionarioListCreate(generics.ListCreateAPIView):
     queryset = Funcionario.objects.all()
@@ -53,3 +54,19 @@ class AplicarDescontoPizzaView(APIView):
             return Response({'erro': 'Percentual inválido.'}, status=status.HTTP_400_BAD_REQUEST)
         pizza.aplicar_desconto(percentual)
         return Response({'mensagem': 'Desconto aplicado com sucesso!'}, status=status.HTTP_200_OK)
+
+def buscar_cep_api(request):
+    cep = request.GET.get('cep', '').replace('-', '').strip()
+
+    if len(cep) != 8 or not cep.isdigit():
+        return JsonResponse({'erro': 'CEP inválido. Use apenas 8 números.'}, status=400)
+
+    resposta = requests.get(f'https://viacep.com.br/ws/{cep}/json/')
+
+    if resposta.status_code == 200:
+        dados = resposta.json()
+        if 'erro' in dados:
+            return JsonResponse({'erro': 'CEP não encontrado.'}, status=404)
+        return JsonResponse(dados)
+    else:
+        return JsonResponse({'erro': 'Erro ao buscar o CEP.'}, status=500)
