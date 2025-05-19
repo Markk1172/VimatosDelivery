@@ -40,20 +40,36 @@ class TaxaEntregaListCreate(generics.ListCreateAPIView):
 
 class AplicarDescontoPizzaView(APIView):
     permission_classes = [IsAuthenticated, IsFuncionario]
+
     def post(self, request, pk):
         try:
             pizza = Pizza.objects.get(pk=pk)
         except Pizza.DoesNotExist:
             return Response({'erro': 'Pizza não encontrada.'}, status=status.HTTP_404_NOT_FOUND)
+
         percentual = request.data.get('percentual')
+
         if percentual is None:
             return Response({'erro': 'Percentual não informado.'}, status=status.HTTP_400_BAD_REQUEST)
+
         try:
             percentual = float(percentual)
         except ValueError:
             return Response({'erro': 'Percentual inválido.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not (0 < percentual < 100):
+            return Response({'erro': 'O percentual deve estar entre 0 e 100.'}, status=status.HTTP_400_BAD_REQUEST)
+
         pizza.aplicar_desconto(percentual)
-        return Response({'mensagem': 'Desconto aplicado com sucesso!'}, status=status.HTTP_200_OK)
+
+        from .serializers import PizzaSerializer  # Import local para evitar circular import, se necessário
+        serializer = PizzaSerializer(pizza)
+
+        return Response({
+            'mensagem': 'Desconto aplicado com sucesso!',
+            'pizza_atualizada': serializer.data
+        }, status=status.HTTP_200_OK)
+
 
 def buscar_cep_api(request):
     cep = request.GET.get('cep', '').replace('-', '').strip()

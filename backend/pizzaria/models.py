@@ -14,6 +14,7 @@ class Funcionario(models.Model):
         return self.nome
 
 class Cliente(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="cliente")
     nome = models.CharField(max_length=100)
     data_nasc = models.DateField()
     cpf = models.CharField(max_length=11, unique=True)
@@ -25,6 +26,7 @@ class Cliente(models.Model):
         return self.nome
 
 class Motoboy(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="Motoboy")
     nome = models.CharField(max_length=100)
     cpf = models.CharField(max_length=11, unique=True)
     data_nasc = models.DateField()
