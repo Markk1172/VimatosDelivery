@@ -27,6 +27,7 @@ function Navbar() {
             <li className="nav-item"><a className="nav-link" href="#about">Trajetoria</a></li>
             <li className="nav-item"><a className="nav-link" href="#team">Time</a></li>
             <li className="nav-item"><a className="nav-link" href="#contact">Contatos</a></li>
+            <li className="nav-item"><a className="nav-link" href="#contact">Login</a></li> 
           </ul>
         </div>
       </div>
