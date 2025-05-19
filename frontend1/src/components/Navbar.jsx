@@ -22,12 +22,12 @@ function Navbar() {
         </button>
         <div className="collapse navbar-collapse" id="navbarResponsive">
           <ul className="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
-            <li className="nav-item"><a className="nav-link" href="#services">Servicesa</a></li>
-            <li className="nav-item"><a className="nav-link" href="#portfolio">Portfolio</a></li>
-            <li className="nav-item"><a className="nav-link" href="#about">About</a></li>
-            <li className="nav-item"><a className="nav-link" href="#team">Team</a></li>
-            <li className="nav-item"><a className="nav-link" href="#contact">Contact</a></li>
-            <li className="nav-item"><a className="nav-link" href="#contact">Login</a></li>
+            <li className="nav-item"><a className="nav-link" href="#services">Serviços</a></li>
+            <li className="nav-item"><a className="nav-link" href="#portfolio">Cardapio</a></li>
+            <li className="nav-item"><a className="nav-link" href="#about">Trajetoria</a></li>
+            <li className="nav-item"><a className="nav-link" href="#team">Time</a></li>
+            <li className="nav-item"><a className="nav-link" href="#contact">Contatos</a></li>
+            <li className="nav-item"><a className="nav-link" href="#contact">Login</a></li> 
           </ul>
         </div>
       </div>
