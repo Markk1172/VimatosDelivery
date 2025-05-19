@@ -6,30 +6,30 @@ import img4 from './../assets/img/about/4.jpg';
 
 const timelineEvents = [
     {
-        date: "2009-2011",
-        title: "Our Humble Beginnings",
-        text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!",
+        date: "2024",
+        title: "Um novo ano, um novo começo",
+        text: "No ano de 2024, 7 jovens iniciam uma nova jornada, a tão esperada faculdade, cada um com seus objetivos mas todos com a mesma paixão por pizzas!",
         img: img1,
         inverted: false,
     },
     {
-        date: "March 2011",
-        title: "An Agency is Born",
-        text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!",
+        date: "Agosto 2024",
+        title: "Separações",
+        text: "Depois de um primeiro semestre juntos, por uma jogada do destino, foram separados em duas turmas diferentes e tiveram vivencias distintas.   ",
         img: img2,
         inverted: true,
     },
     {
-        date: "December 2015",
-        title: "Transition to Full Service",
-        text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!",
+        date: "Março 2025",
+        title: "Reencontro",
+        text: "Após um momento conturbado de tentativas de reunião, todos conseguiram estar na mesma turma e decidem formar um grupo para resolver os trabalhos que vieram no semestre.",
         img: img3,
         inverted: false,
     },
     {
-        date: "July 2020",
-        title: "Phase Two Expansion",
-        text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!",
+        date: "Maio 2025",
+        title: "Jornada de Pizzas",
+        text: "Em momentos de finalização de mais um semestre, ainda há mais uma tarefa a ser realizada, um delivery de pizzas! Cruzando com todos os temas que foram abordados no semestre",
         img: img4,
         inverted: true,
     },
@@ -41,9 +41,9 @@ const About = () => (
     <section className="page-section" id="about">
         <div className="container">
             <div className="text-center">
-                <h2 className="section-heading text-uppercase">About</h2>
+                <h2 className="section-heading text-uppercase">Trajetoria</h2>
                 <h3 className="section-subheading text-muted">
-                    Lorem ipsum dolor sit amet consectetur.
+                    Uma breve introdução ao nosso grupo!
                 </h3>
             </div>
             <ul className="timeline">
@@ -73,11 +73,11 @@ const About = () => (
                 <li className="timeline-inverted">
                     <div className="timeline-image">
                         <h4>
-                            Be Part
+                            Uma historia
                             <br />
-                            Of Our
+                            que não termina
                             <br />
-                            Story!
+                            aqui!
                         </h4>
                     </div>
                 </li>

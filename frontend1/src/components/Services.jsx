@@ -36,7 +36,7 @@ function Services() {
                     <div className="col-md-4">
                         <span className="fa-stack fa-4x">
                             <i className="fas fa-circle fa-stack-2x text-danger"></i>
-                            <i className="fas fa-lock fa-stack-1x fa-inverse"></i>
+                            <i className="fas fa-motorcycle fa-stack-1x fa-inverse"></i>
                         </span>
                         <h4 className="my-3">Web Security</h4>
                         <p className="text-muted">

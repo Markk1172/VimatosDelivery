@@ -3,61 +3,61 @@ import React from "react";
 const portfolioModals = [
   {
     id: "portfolioModal1",
-    title: "Threads",
-    subtitle: "Lorem ipsum dolor sit amet consectetur.",
+    title: "Calabresa",
+    subtitle: "Classíca.",
     img: "/assets/img/portfolio/1.jpg",
     description:
-      "Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae, nostrum, reiciendis facere nemo!",
+      "Tradicional e irresistível: fatias generosas de calabresa levemente apimentada, cobertas com cebola, orégano fresco e um toque especial do nosso molho artesanal. Assada até a borda ficar crocante e o sabor incomparável.",
     client: "Threads",
     category: "Illustration",
   },
   {
     id: "portfolioModal2",
-    title: "Explore",
-    subtitle: "Lorem ipsum dolor sit amet consectetur.",
+    title: "Portuguesa",
+    subtitle: "Colonizante não?",
     img: "/assets/img/portfolio/2.jpg",
     description:
-      "Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae, nostrum, reiciendis facere nemo!",
-    client: "Explore",
+      "Uma combinação rica e colorida: presunto, ovo, cebola, pimentão e azeitonas, sobre uma base de queijo e molho caseiro. Uma explosão de sabores que homenageia a tradição.",
+          client: "Explore",
     category: "Graphic Design",
   },
   {
     id: "portfolioModal3",
-    title: "Finish",
-    subtitle: "Lorem ipsum dolor sit amet consectetur.",
+    title: "Muçarela",
+    subtitle: "Basica, mas extraordinária.",
     img: "/assets/img/portfolio/3.jpg",
     description:
-      "Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae, nostrum, reiciendis facere nemo!",
-    client: "Finish",
+      "Simples, clássica e amada por todos. Coberta com uma generosa camada de muçarela derretida, realçada com um toque de orégano e nosso molho artesanal. Uma explosão de sabor a cada mordida.",
+          client: "Finish",
     category: "Identity",
   },
   {
     id: "portfolioModal4",
-    title: "Lines",
-    subtitle: "Lorem ipsum dolor sit amet consectetur.",
+    title: "Coca-Cola",
+    subtitle: "Refrigerante, sempre uma boa pedida!.",
     img: "/assets/img/portfolio/4.jpg",
     description:
-      "Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae, nostrum, reiciendis facere nemo!",
+      "Clássica, refrescante e inconfundível. Servida sempre gelada, é a escolha perfeita para acompanhar qualquer pizza. O equilíbrio ideal entre sabor e efervescência que só a Coca tem.",
     client: "Lines",
     category: "Branding",
   },
   {
     id: "portfolioModal5",
-    title: "Southwest",
-    subtitle: "Lorem ipsum dolor sit amet consectetur.",
-    img: "/assets/img/portfolio/5.jpg",
+    title: "Chocolate",
+    subtitle: "Doce, incrivel e colorida.",
+    img: "/assets/img/portfolio/5.png",
     description:
-      "Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae, nostrum, reiciendis facere nemo!",
+      "Doce na medida certa! Coberta com uma camada cremosa de chocolate ao leite, finalizada com confeitos, é a escolha perfeita para os amantes de sobremesa. Irresistivelmente deliciosa do início ao fim.",
     client: "Southwest",
     category: "Website Design",
   },
   {
     id: "portfolioModal6",
-    title: "Window",
-    subtitle: "Lorem ipsum dolor sit amet consectetur.",
+    title: "Frango com Catupiry",
+    subtitle: "Gostosa como nenhuma outra.",
     img: "/assets/img/portfolio/6.jpg",
     description:
-      "Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae, nostrum, reiciendis facere nemo!",
+      "Frango desfiado bem temperado coberto com catupiry cremoso, tudo sobre uma base crocante e dourada. Uma mistura perfeita de textura e sabor que conquista todos os paladares.",
     client: "Window",
     category: "Photography",
   },
@@ -96,10 +96,10 @@ function PortfolioModals() {
                       <p>{item.description}</p>
                       <ul className="list-inline">
                         <li>
-                          <strong>Client:</strong> {item.client}
+                          
                         </li>
                         <li>
-                          <strong>Category:</strong> {item.category}
+                          
                         </li>
                       </ul>
                       <button
@@ -108,7 +108,7 @@ function PortfolioModals() {
                         type="button"
                       >
                         <i className="fas fa-xmark me-1"></i>
-                        Close Project
+                        Fechar aba.
                       </button>
                     </div>
                   </div>
