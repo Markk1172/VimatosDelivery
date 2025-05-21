@@ -1,6 +1,7 @@
 import React from 'react';
-import logo from './../assets/img/logo.jpg'; // ajuste conforme a localização real do logo
-import './Navbar.css'; // crie este arquivo para os estilos customizados
+import logo from './../assets/img/logo.jpg'; 
+import '../assets/css/Navbar.css'; 
+import { Link } from 'react-router-dom';
 
 function Navbar() {
   return (
@@ -23,11 +24,13 @@ function Navbar() {
         <div className="collapse navbar-collapse" id="navbarResponsive">
           <ul className="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
             <li className="nav-item"><a className="nav-link" href="#services">Serviços</a></li>
-            <li className="nav-item"><a className="nav-link" href="#portfolio">Cardapio</a></li>
-            <li className="nav-item"><a className="nav-link" href="#about">Trajetoria</a></li>
+            <li className="nav-item"><a className="nav-link" href="#portfolio">Cardápio</a></li>
+            <li className="nav-item"><a className="nav-link" href="#about">Trajetória</a></li>
             <li className="nav-item"><a className="nav-link" href="#team">Time</a></li>
             <li className="nav-item"><a className="nav-link" href="#contact">Contatos</a></li>
-            <li className="nav-item"><a className="nav-link" href="#contact">Login</a></li> 
+            <li className="nav-item">
+              <Link to="/login" className="nav-link">Login</Link>
+            </li>
           </ul>
         </div>
       </div>
