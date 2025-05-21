@@ -1,7 +1,7 @@
 import React from "react";
-import img1 from '../assets/img/team/1.jpg';
-import img2 from '../assets/img/team/2.jpg';
-import img3 from '../assets/img/team/3.jpg';
+import img1 from '../assets/img/team/img1Team.jpg';
+import img2 from '../assets/img/team/img2Team.jpg';
+import img3 from '../assets/img/team/img3Team.jpg';
 
 const teamMembers = [
     {

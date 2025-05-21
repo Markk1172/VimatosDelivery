@@ -1,15 +1,18 @@
 import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
 import Navbar from './components/Navbar';
 import Header from './components/Header';
 import Services from './components/Services';
 import Portfolio from './components/Portfolio';
 import About from './components/About';
 import Teams from './components/Teams';
-import Contact from './components/contact'; // <-- Adicione esta linha
+import Contact from './components/contact';
 import Footer from './components/Footer';
 import PortfolioModals from './components/portflioModal';
+import Login from './components/Login';
 
-function App() {
+function Home() {
   return (
     <>
       <Navbar />
@@ -18,10 +21,21 @@ function App() {
       <Portfolio />
       <About />
       <Teams />
-      <Contact /> {/* <-- Adicione aqui */}
+      <Contact />
       <Footer />
       <PortfolioModals />
     </>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
