@@ -40,7 +40,7 @@ function Services() {
                         </span>
                         <h4 className="my-3">Delivery</h4>
                         <p className="text-muted">
-                            Temos um serviço próprio de entregas para que você possa receber sua pizza e sua bebida na temperatura perfeita.
+                            Temos um serviço próprio de entregas para que você possa receber sua pizza e sua bebida na temperatura perfeita .
                         </p>
                     </div>
                 </div>
