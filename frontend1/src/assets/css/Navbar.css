@@ -1,24 +1,44 @@
+/* Estilo inicial: transparente */
 .custom-navbar {
-  background-color: #212529 !important; /* preto fixo */
-  transition: background-color 0.3s;
+  background-color: transparent !important;
+  transition: background-color 0.3s, padding 0.3s;
+  padding: 1rem 0;
+  z-index: 9999;
 }
 
+/* Estilo quando rola a página: fundo escuro, sombra e padding reduzido */
+.custom-navbar.scrolled {
+  background-color: #250a0a !important;
+  padding: 0.5rem 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Logo */
 .custom-navbar .navbar-brand img {
+  height: 40px;
   filter: brightness(1);
-  transition: filter 0.3s;
+  transition: filter 0.3s, height 0.3s;
 }
 
+/* Quando scrolled, reduz a logo */
+.custom-navbar.scrolled .navbar-brand img {
+  height: 35px;
+}
+
+/* Estilo dos links */
 .custom-navbar .navbar-nav .nav-link {
   color: #fff !important;
   transition: color 0.2s;
   position: relative;
 }
 
+/* Hover e item ativo */
 .custom-navbar .navbar-nav .nav-link:hover,
 .custom-navbar .navbar-nav .nav-link.active {
-  color: #ffc800 !important; /* cor destaque ao passar o mouse */
+  color: #ff2a00 !important; /* cor destaque ao passar o mouse */
 }
 
+/* Logo escurece ao passar o mouse */
 .custom-navbar .navbar-brand:hover img {
   filter: brightness(0.7);
 }

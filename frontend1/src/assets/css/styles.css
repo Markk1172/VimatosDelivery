@@ -10953,6 +10953,25 @@ header.masthead {
   background-position: center center;
   background-size: cover;
 }
+header.masthead {
+  position: relative;
+  /* ...demais estilos já existentes... */
+  z-index: 0;
+  overflow: hidden;
+}
+
+header.masthead::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5); /* Ajuste o 0.5 para mais ou menos escuro */
+  z-index: 1;
+}
+
+header.masthead > * {
+  position: relative;
+  z-index: 2;
+}
 header.masthead .masthead-subheading {
   font-size: 1.5rem;
   font-style: italic;

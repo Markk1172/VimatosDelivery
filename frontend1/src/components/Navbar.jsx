@@ -1,9 +1,23 @@
-import React from 'react';
-import logo from './../assets/img/logo.jpg'; 
-import '../assets/css/Navbar.css'; 
+import React, { useEffect } from 'react';
+import logo from './../assets/img/logo.png';
+import '../assets/css/Navbar.css';
 import { Link } from 'react-router-dom';
 
 function Navbar() {
+  useEffect(() => {
+    const handleScroll = () => {
+      const navbar = document.getElementById("mainNav");
+      if (window.scrollY > 50) {
+        navbar.classList.add("scrolled");
+      } else {
+        navbar.classList.remove("scrolled");
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark fixed-top custom-navbar" id="mainNav">
       <div className="container">

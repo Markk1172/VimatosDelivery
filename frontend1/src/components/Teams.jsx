@@ -34,6 +34,46 @@ const teamMembers = [
             { icon: "fab fa-linkedin-in", label: "LinkedIn Profile", href: "#!" },
         ],
     },
+    {
+        name: "Larry Parker",
+        role: "Lead Developer",
+        img: img3,
+        socials: [
+            { icon: "fab fa-twitter", label: "Twitter Profile", href: "#!" },
+            { icon: "fab fa-facebook-f", label: "Facebook Profile", href: "#!" },
+            { icon: "fab fa-linkedin-in", label: "LinkedIn Profile", href: "#!" },
+        ],
+    },
+    {
+        name: "Larry Parker",
+        role: "Lead Developer",
+        img: img3,
+        socials: [
+            { icon: "fab fa-twitter", label: "Twitter Profile", href: "#!" },
+            { icon: "fab fa-facebook-f", label: "Facebook Profile", href: "#!" },
+            { icon: "fab fa-linkedin-in", label: "LinkedIn Profile", href: "#!" },
+        ],
+    },
+    {
+        name: "Larry Parker",
+        role: "Lead Developer",
+        img: img3,
+        socials: [
+            { icon: "fab fa-twitter", label: "Twitter Profile", href: "#!" },
+            { icon: "fab fa-facebook-f", label: "Facebook Profile", href: "#!" },
+            { icon: "fab fa-linkedin-in", label: "LinkedIn Profile", href: "#!" },
+        ],
+    },
+    {
+        name: "Larry Parker",
+        role: "Lead Developer",
+        img: img3,
+        socials: [
+            { icon: "fab fa-twitter", label: "Twitter Profile", href: "#!" },
+            { icon: "fab fa-facebook-f", label: "Facebook Profile", href: "#!" },
+            { icon: "fab fa-linkedin-in", label: "LinkedIn Profile", href: "#!" },
+        ],
+    },
 ];
 
 // ...restante do componente igual...
@@ -47,12 +87,12 @@ const Teams = () => (
                     Lorem ipsum dolor sit amet consectetur.
                 </h3>
             </div>
-            <div className="row">
+            <div className="row flex-wrap justify-content-center">
                 {teamMembers.map((member, idx) => (
-                    <div className="col-lg-4" key={member.name}>
+                    <div className="col-lg-3 col-md-4 col-sm-6 mb-4" key={member.name + idx}>
                         <div className="team-member">
                             <img
-                                className="mx-auto rounded-circle"
+                                className="mx-auto rounded-circle team-img-small"
                                 src={member.img}
                                 alt={member.name}
                             />
@@ -60,7 +100,7 @@ const Teams = () => (
                             <p className="text-muted">{member.role}</p>
                             {member.socials.map((social, i) => (
                                 <a
-                                    className="btn btn-dark btn-social mx-2"
+                                    className="btn btn-dark btn-sm mx-1 my-1"
                                     href={social.href}
                                     aria-label={`${member.name} ${social.label}`}
                                     key={social.icon}

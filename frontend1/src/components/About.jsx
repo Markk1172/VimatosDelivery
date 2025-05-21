@@ -41,7 +41,7 @@ const About = () => (
     <section className="page-section" id="about">
         <div className="container">
             <div className="text-center">
-                <h2 className="section-heading text-uppercase">Trajetoria</h2>
+                <h2 className="section-heading text-uppercase">Trajetória</h2>
                 <h3 className="section-subheading text-muted">
                     Uma breve introdução ao nosso grupo!
                 </h3>

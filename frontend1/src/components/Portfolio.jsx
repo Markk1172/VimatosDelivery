@@ -35,7 +35,7 @@ const portfolioItems = [
   {
     title: "Chocolate",
     subtitle: "Saborosa e doce",
-    img: "/assets/img/portfolio/5.png",
+    img: "/assets/img/portfolio/5.jpg",
     modal: "#portfolioModal5",
   },
   {
@@ -52,7 +52,7 @@ function Portfolio() {
     <section className="page-section bg-light" id="portfolio">
       <div className="container">
         <div className="text-center">
-          <h2 className="section-heading text-uppercase">Cardapio</h2>
+          <h2 className="section-heading text-uppercase">Cardápio</h2>
           <h3 className="section-subheading text-muted">Nossos campeões de vendas!</h3>
         </div>
         <div className="row">
