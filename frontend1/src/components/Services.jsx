@@ -18,9 +18,9 @@ function Services() {
                         <i className="fas fa-pizza-slice fa-stack-1x fa-inverse"></i> {/* ícone branco */}
                     </span>
 
-                        <h4 className="my-3">E-Commerce</h4>
+                        <h4 className="my-3">Pizzas</h4>
                         <p className="text-muted">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.
+                            Cada pizza é preparada com carinho, qualidade e tradição. Tudo começa com uma massa fresca e artesanal, feita diariamente para garantir leveza, crocância e sabor inconfundível.
                         </p>
                     </div>
                     <div className="col-md-4">
@@ -28,9 +28,9 @@ function Services() {
                             <i className="fas fa-circle fa-stack-2x text-danger"></i>
                             <i className="fas fa-wine-glass fa-stack-1x fa-inverse"></i>
                         </span>
-                        <h4 className="my-3">Responsive Design</h4>
+                        <h4 className="my-3">Bebidas</h4>
                         <p className="text-muted">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.
+                            Bebidas sempre geladas, com uma variedade para todos os gostos — para quem aprecia sua pizza com vinhos, refrigerantes ou um bo suco. O acompanhamento ideal para tornar sua refeição ainda mais saborosa.
                         </p>
                     </div>
                     <div className="col-md-4">
@@ -38,9 +38,9 @@ function Services() {
                             <i className="fas fa-circle fa-stack-2x text-danger"></i>
                             <i className="fas fa-motorcycle fa-stack-1x fa-inverse"></i>
                         </span>
-                        <h4 className="my-3">Web Security</h4>
+                        <h4 className="my-3">Delivery</h4>
                         <p className="text-muted">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.
+                            Temos um serviço próprio de entregas para que você possa receber sua pizza e sua bebida na temperatura perfeita .
                         </p>
                     </div>
                 </div>
