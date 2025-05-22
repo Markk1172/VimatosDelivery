@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, get_user_model
 from django.http import JsonResponse
 
 import requests
-
+from django.db import IntegrityError
 from .permissions import IsFuncionario
 from .models import Funcionario, Motoboy, Pizza, Bebida, Cliente, TaxaEntrega
 from .serializers import FuncionarioSerializer, MotoboySerializer, PizzaSerializer, BebidaSerializer, ClienteSerializer, TaxaEntregaSerializer
@@ -19,33 +19,83 @@ User = get_user_model()
 def login_view(request):
     email = request.data.get('email')
     password = request.data.get('password')
-    user = authenticate(username=User.objects.get(email=email).username, password=password)
+
+    try:
+        # Tenta obter o usuário pelo email primeiro
+        user_obj = User.objects.get(email=email)
+    except User.DoesNotExist:
+        return JsonResponse({'error': 'Usuário não encontrado'}, status=404)
+
+    # Autentica o usuário usando o username (que pode ser o email ou um campo username real)
+    # Se o seu User model usa email como username, então user_obj.username será o email.
+    user = authenticate(username=user_obj.username, password=password)
+
     if user:
+        # Se a autenticação for bem-sucedida, gera os tokens JWT
         refresh = RefreshToken.for_user(user)
+        
+        # Obter o nome do cliente associado, se existir
+        cliente_nome = None
+        try:
+            cliente_nome = user.cliente.nome # Acede ao nome do cliente através da relação OneToOneField
+        except Cliente.DoesNotExist:
+            # Se não for um cliente, pode ser um funcionário ou apenas um usuário genérico
+            # Pode adicionar lógica para Funcionario aqui se necessário
+            pass 
+
         return JsonResponse({
             'message': 'Login realizado com sucesso',
             'access_token': str(refresh.access_token),
-            'refresh_token': str(refresh)
+            'refresh_token': str(refresh),
+            'user_name': cliente_nome if cliente_nome else user.username, # Retorna o nome do cliente ou o username do Django
+            'user_email': user.email # Retorna o email do usuário
         }, status=200)
     else:
+        # Se a autenticação falhar (senha incorreta)
         return JsonResponse({'error': 'Credenciais inválidas'}, status=400)
 
 
 @api_view(['POST'])
 def register_view(request):
     try:
-        username = request.data.get('name')
+        username = request.data.get('name') # Nome completo do formulário
         email = request.data.get('email')
         password = request.data.get('password')
+        phone = request.data.get('phone')
+        birthdate = request.data.get('birthdate') # Data de nascimento
+        cpf = request.data.get('cpf')
+        address = request.data.get('address')
+        cep = request.data.get('cep') # CEP, se você quiser armazená-lo no Cliente
 
+        # Verificação se o email já está cadastrado no modelo User
         if User.objects.filter(email=email).exists():
             return JsonResponse({'error': 'Email já cadastrado'}, status=400)
-
+        
+        # Verificação se o CPF já está cadastrado no modelo Cliente
+        if Cliente.objects.filter(cpf=cpf).exists():
+            return JsonResponse({'error': 'CPF já cadastrado'}, status=400)
+        
         user = User.objects.create_user(username=username, email=email, password=password)
         user.save()
-        return JsonResponse({'message': 'Usuário criado com sucesso'}, status=201)
+
+        # 2. Criar o objeto Cliente e associá-lo ao User
+        cliente = Cliente.objects.create(
+            user=user, # Associa o User recém-criado
+            nome=username,
+            data_nasc=birthdate,
+            cpf=cpf,
+            endereco=address,
+            email=email,
+            telefone=phone
+        )
+        cliente.save()
+
+        return JsonResponse({'message': 'Usuário e Cliente criados com sucesso'}, status=201)
+    except IntegrityError as e:
+        # Captura erros de integridade (ex: username/email/cpf duplicado)
+        return JsonResponse({'error': f'Erro de integridade: {e}'}, status=400)
     except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
+        return JsonResponse({'error': f'Ocorreu um erro inesperado: {str(e)}'}, status=500)
 
 class FuncionarioListCreate(generics.ListCreateAPIView):
     queryset = Funcionario.objects.all()

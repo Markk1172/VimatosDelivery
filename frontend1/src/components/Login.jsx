@@ -6,6 +6,13 @@ import { useNavigate } from 'react-router-dom';
 const Login = () => {
   const navigate = useNavigate();
   const [rightPanelActive, setRightPanelActive] = useState(false);
+  const [message, setMessage] = useState({ text: '', type: '' }); // State for feedback messages
+
+  // Function to display messages on the screen
+  const showMessage = (text, type) => {
+    setMessage({ text, type });
+    setTimeout(() => setMessage({ text: '', type: '' }), 5000); // Hide message after 5 seconds
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -21,13 +28,20 @@ const Login = () => {
 
       const data = await response.json();
       if (response.ok) {
-        alert('Login realizado com sucesso');
-        navigate('/'); 
+        // Store tokens and user information in localStorage
+        localStorage.setItem('accessToken', data.access_token);
+        localStorage.setItem('refreshToken', data.refresh_token);
+        localStorage.setItem('userName', data.user_name);
+        localStorage.setItem('userEmail', data.user_email);
+
+        showMessage('Login realizado com sucesso!', 'success');
+        navigate('/'); // Redirect to home page
       } else {
-        alert(data.error || 'Erro no login');
+        showMessage(data.error || 'Erro no login. Verifique as suas credenciais.', 'error');
       }
     } catch (error) {
       console.error('Erro ao conectar com o servidor:', error);
+      showMessage('Erro ao conectar com o servidor. Tente novamente mais tarde.', 'error');
     }
   };
 
@@ -45,13 +59,14 @@ const Login = () => {
 
       const data = await response.json();
       if (response.ok) {
-        alert('Cadastro realizado com sucesso');
-        setRightPanelActive(false);
+        showMessage('Registo realizado com sucesso! Faça login agora.', 'success');
+        setRightPanelActive(false); // Go back to login screen
       } else {
-        alert(data.error || 'Erro no cadastro');
+        showMessage(data.error || 'Erro no registo. Tente novamente.', 'error');
       }
     } catch (error) {
       console.error('Erro ao conectar com o servidor:', error);
+      showMessage('Erro ao conectar com o servidor. Tente novamente mais tarde.', 'error');
     }
   };
 
