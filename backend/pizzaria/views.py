@@ -1,13 +1,51 @@
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import authenticate, get_user_model
+from django.http import JsonResponse
+
+import requests
+
 from .permissions import IsFuncionario
 from .models import Funcionario, Motoboy, Pizza, Bebida, Cliente, TaxaEntrega
 from .serializers import FuncionarioSerializer, MotoboySerializer, PizzaSerializer, BebidaSerializer, ClienteSerializer, TaxaEntregaSerializer
-import requests
-from django.http import JsonResponse
+
+User = get_user_model()
+
+@api_view(['POST'])
+def login_view(request):
+    email = request.data.get('email')
+    password = request.data.get('password')
+    user = authenticate(username=User.objects.get(email=email).username, password=password)
+    if user:
+        refresh = RefreshToken.for_user(user)
+        return JsonResponse({
+            'message': 'Login realizado com sucesso',
+            'access_token': str(refresh.access_token),
+            'refresh_token': str(refresh)
+        }, status=200)
+    else:
+        return JsonResponse({'error': 'Credenciais inválidas'}, status=400)
+
+
+@api_view(['POST'])
+def register_view(request):
+    try:
+        username = request.data.get('name')
+        email = request.data.get('email')
+        password = request.data.get('password')
+
+        if User.objects.filter(email=email).exists():
+            return JsonResponse({'error': 'Email já cadastrado'}, status=400)
+
+        user = User.objects.create_user(username=username, email=email, password=password)
+        user.save()
+        return JsonResponse({'message': 'Usuário criado com sucesso'}, status=201)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
 
 class FuncionarioListCreate(generics.ListCreateAPIView):
     queryset = Funcionario.objects.all()
@@ -62,7 +100,6 @@ class AplicarDescontoPizzaView(APIView):
 
         pizza.aplicar_desconto(percentual)
 
-        from .serializers import PizzaSerializer  # Import local para evitar circular import, se necessário
         serializer = PizzaSerializer(pizza)
 
         return Response({

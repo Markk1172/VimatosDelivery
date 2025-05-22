@@ -1,15 +1,58 @@
 import React, { useState } from 'react';
 import backgroundImage from '../assets/img/login.jpg';
 import logo from '../assets/img/logo.png';
-
-
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  const navigate = useNavigate();
   const [rightPanelActive, setRightPanelActive] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    alert("Formulário enviado!");
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/login/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        alert('Login realizado com sucesso');
+        navigate('/'); 
+      } else {
+        alert(data.error || 'Erro no login');
+      }
+    } catch (error) {
+      console.error('Erro ao conectar com o servidor:', error);
+    }
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const userData = Object.fromEntries(formData.entries());
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/register/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        alert('Cadastro realizado com sucesso');
+        setRightPanelActive(false);
+      } else {
+        alert(data.error || 'Erro no cadastro');
+      }
+    } catch (error) {
+      console.error('Erro ao conectar com o servidor:', error);
+    }
   };
 
   const cssStyles = `
@@ -44,13 +87,6 @@ const Login = () => {
       margin: 0 0 1.25rem 0;
       text-align: center;
       width: 100%;
-    }
-
-    .link {
-      color: var(--gray);
-      font-size: 0.9rem;
-      margin: 1.5rem 0;
-      text-decoration: none;
     }
 
     .container {
@@ -144,7 +180,6 @@ const Login = () => {
       transition: transform 0.6s ease-in-out;
       width: 200%;
     }
-
 
     .container.right-panel-active .overlay {
       transform: translateX(50%);
@@ -241,7 +276,8 @@ const Login = () => {
   `;
 
   return (
-    <div id="login-page"
+    <div
+      id="login-page"
       style={{
         backgroundImage: `url(${backgroundImage})`,
         backgroundSize: "cover",
@@ -260,10 +296,11 @@ const Login = () => {
       }}
     >
       <style dangerouslySetInnerHTML={{ __html: cssStyles }} />
+
       <div className={`container ${rightPanelActive ? "right-panel-active" : ""}`}>
         {/* Cadastro */}
         <div className="container__form container--signup" id="signup-form">
-          <form onSubmit={handleSubmit} className="form">
+          <form onSubmit={handleRegister} className="form">
             <h2 className="form__title">Cadastrar-se</h2>
             <input name="name" type="text" placeholder="Nome completo" className="input" required />
             <input name="email" type="email" placeholder="E-mail" className="input" required />
@@ -279,21 +316,49 @@ const Login = () => {
 
         {/* Login */}
         <div className="container__form container--signin" id="login-form">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#cf301d" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16"style={{cursor: 'pointer', position: 'absolute', top: '20px', left: '20px', zIndex: 1000,}} onClick={() => window.history.back()}>
-          <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0m3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"/>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="#cf301d"
+            className="bi bi-arrow-left-circle-fill"
+            viewBox="0 0 16 16"
+            style={{
+              cursor: 'pointer',
+              position: 'absolute',
+              top: '20px',
+              left: '20px',
+              zIndex: 1000,
+            }}
+            onClick={() => window.history.back()}
+          >
+            <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0m3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z" />
           </svg>
-          <img src={logo}alt="Logo" style={{width: '120px', position: 'absolute', top: '15%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 10,}}/>
-          <form onSubmit={handleSubmit} className="form">
+
+          <img
+            src={logo}
+            alt="Logo"
+            style={{
+              width: '120px',
+              position: 'absolute',
+              top: '15%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              zIndex: 10,
+            }}
+          />
+
+          <form onSubmit={handleLogin} className="form">
             <h2 className="form__title">Entrar</h2>
-            <input name="email" type="email" placeholder="Email" className="input" />
-            <input name="password" type="password" placeholder="Senha" className="input" />
+            <input name="email" type="email" placeholder="Email" className="input" required />
+            <input name="password" type="password" placeholder="Senha" className="input" required />
             <button className="btn">Acessar</button>
           </form>
         </div>
 
         {/* Painel de troca */}
         <div className="container__overlay">
-          <div className="overlay" style={{backgroundImage: `url(${backgroundImage})`}}>
+          <div className="overlay" style={{ backgroundImage: `url(${backgroundImage})` }}>
             <div className="overlay__panel overlay--left">
               <button className="btn" onClick={() => setRightPanelActive(false)}>
                 Fazer login
