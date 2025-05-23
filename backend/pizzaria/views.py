@@ -8,6 +8,7 @@ from django.contrib.auth import authenticate, get_user_model
 from django.http import JsonResponse
 
 import requests
+from django.conf import settings
 from django.db import IntegrityError
 from .permissions import IsFuncionario
 from .models import Funcionario, Motoboy, Pizza, Bebida, Cliente, TaxaEntrega
@@ -173,3 +174,76 @@ def buscar_cep_api(request):
         return JsonResponse(dados)
     else:
         return JsonResponse({'erro': 'Erro ao buscar o CEP.'}, status=500)
+
+def calcular_rota(request):
+    origem_cep = request.GET.get('origem', '').replace('-', '').strip()
+    destino_cep = request.GET.get('destino', '').replace('-', '').strip()
+
+    if not (origem_cep and destino_cep):
+        return JsonResponse({'erro': 'Informe os CEPs de origem e destino.'}, status=400)
+
+    #Função para buscar o endereço no ViaCEP
+    def buscar_coordenadas(cep):
+        resposta = requests.get(f'https://viacep.com.br/ws/{cep}/json/')
+        if resposta.status_code != 200:
+            return None
+        dados = resposta.json()
+        if 'erro' in dados:
+            return None
+
+        endereco = f"{dados['logradouro']}, {dados['localidade']}, {dados['uf']}, Brasil"
+        
+        # Usando OpenRouteService pra geocodificar o endereço
+        ORS_API_KEY = settings.ORS_API_KEY
+        geocode_url = 'https://api.openrouteservice.org/geocode/search'
+
+        params = {
+            'api_key': ORS_API_KEY,
+            'text': endereco,
+            'boundary.country': 'BR'
+        }
+
+        resposta_geo = requests.get(geocode_url, params=params)
+        if resposta_geo.status_code != 200:
+            return None
+
+        geo_data = resposta_geo.json()
+        try:
+            coordinates = geo_data['features'][0]['geometry']['coordinates']  # [long, lat]
+            return coordinates
+        except (IndexError, KeyError):
+            return None
+
+    #Pegando as coordenadas
+    origem_coord = buscar_coordenadas(origem_cep)
+    destino_coord = buscar_coordenadas(destino_cep)
+
+    if not origem_coord or not destino_coord:
+        return JsonResponse({'erro': 'Não foi possível obter as coordenadas de um ou ambos os CEPs.'}, status=400)
+
+    #Calculando rota
+    rota_url = 'https://api.openrouteservice.org/v2/directions/motorcycle'
+    headers = {'Authorization': settings.ORS_API_KEY}
+
+    rota_body = {
+        'coordinates': [origem_coord, destino_coord]
+    }
+
+    rota_resposta = requests.post(rota_url, json=rota_body, headers=headers)
+
+    if rota_resposta.status_code != 200:
+        return JsonResponse({'erro': 'Erro ao calcular a rota.'}, status=500)
+
+    rota_dados = rota_resposta.json()
+    try:
+        distancia_metros = rota_dados['features'][0]['properties']['segments'][0]['distance']
+        duracao_segundos = rota_dados['features'][0]['properties']['segments'][0]['duration']
+
+        return JsonResponse({
+            'distancia_km': round(distancia_metros / 1000, 2),
+            'duracao_minutos': round(duracao_segundos / 60, 2),
+            'origem': origem_cep,
+            'destino': destino_cep
+        })
+    except (IndexError, KeyError):
+        return JsonResponse({'erro': 'Erro ao processar dados da rota.'}, status=500)

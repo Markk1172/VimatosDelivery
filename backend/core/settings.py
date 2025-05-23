@@ -9,8 +9,10 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+import os
+from dotenv import load_dotenv
 from pathlib import Path
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -141,3 +143,14 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
+
+load_dotenv()  # Carrega as variáveis do .env
+
+ORS_API_KEY = os.getenv('ORS_API_KEY')
+
+
+from django.conf import settings
+
+# ...
+ORS_API_KEY = '5b3ce3597851110001cf62482ac30d8552fa469eb422ccec480d3fcc'
+ORS_API_KEY = settings.ORS_API_KEY
