@@ -3,8 +3,8 @@ from . import views
 from .views import (
     AplicarDescontoPizzaView,
     FuncionarioListCreate, ClienteListCreate, MotoboyListCreate,
-    PizzaListCreate, BebidaListCreate, TaxaEntregaListCreate,
-    buscar_cep_api # buscar_cep_api é acessível diretamente porque foi importado aqui
+    PizzaListCreate, BebidaListCreate, TaxaEntregaListCreate, 
+    calcular_rota, buscar_cep_api,
 )
 
 urlpatterns = [
@@ -17,5 +17,6 @@ urlpatterns = [
     path('pizzas/<int:pk>/aplicar-desconto/', AplicarDescontoPizzaView.as_view(), name='aplicar-desconto-pizza'),
     path('buscar-cep/', buscar_cep_api, name='buscar_cep_api'),
     path('login/', views.login_view, name='login'), 
-    path('register/', views.register_view, name='register'), 
+    path('register/', views.register_view, name='register'),
+    path('calcular-rota/', calcular_rota, name='calcular_rota'), 
 ]
