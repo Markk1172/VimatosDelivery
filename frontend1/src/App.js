@@ -11,6 +11,9 @@ import Contact from './components/contact';
 import Footer from './components/Footer';
 import PortfolioModals from './components/portflioModal';
 import Login from './components/Login';
+import FilaPedidos from './components/FilaPedidos'; 
+import EntregaRetirada from './components/EntregaRetirada';
+import Cadastros from './components/Cadastros';
 
 function Home() {
   return (
@@ -34,7 +37,9 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<Home />} />
-        {/* Outras rotas aqui */}
+        <Route path="/fila-pedidos" element={<FilaPedidos nomeCliente="Amanda Beatriz" />} /> 
+        <Route path="/entrega" element={<EntregaRetirada />} /> 
+        <Route path="/cadastros" element={<Cadastros />} />
       </Routes>
     </Router>
   );
