@@ -267,10 +267,10 @@ const ClienteEdit = () => {
       }
       .btn:hover { background-color:rgb(0, 135, 0); }
       .btn.delete { 
-          background-color: #dc3545; 
+          background-color: #cf301d; 
           margin-top: 12px; 
       }
-      .btn.delete:hover { background-color: #c82333; }
+      .btn.delete:hover { background-color: #cf301d; }
       .btn:disabled { background-color: #ccc; cursor: not-allowed; }
       .loading-text { font-size: 1em; color: #555; margin: 15px 0; }
       .back-button { 
