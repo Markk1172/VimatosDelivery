@@ -1,25 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import logo from '../assets/img/logo.png';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'; 
 
 const Navbar = () => {
   const [hoveredLink, setHoveredLink] = useState(null);
   const [loggedInUser, setLoggedInUser] = useState(null);
+  const [isFuncionario, setIsFuncionario] = useState(false); // Novo estado
   const navigate = useNavigate();
 
   useEffect(() => {
-    const checkLoginStatus = () => {
+    const checkUserStatus = () => {
       const userName = localStorage.getItem('userName');
+      const funcionarioStatus = localStorage.getItem('isFuncionario') === 'true'; // Verifica se é funcionário
+
       if (userName) {
         setLoggedInUser(userName);
+        setIsFuncionario(funcionarioStatus); // Define o estado de funcionário
       } else {
         setLoggedInUser(null);
+        setIsFuncionario(false);
       }
     };
 
-    checkLoginStatus();
-    window.addEventListener('storage', checkLoginStatus);
-    return () => window.removeEventListener('storage', checkLoginStatus);
+    checkUserStatus();
+    window.addEventListener('storage', checkUserStatus); // Ouve mudanças no localStorage
+    return () => window.removeEventListener('storage', checkUserStatus);
   }, []);
 
   const handleLogout = () => {
@@ -27,14 +32,17 @@ const Navbar = () => {
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('userName');
     localStorage.removeItem('userEmail');
+    localStorage.removeItem('clienteId');
+    localStorage.removeItem('isFuncionario'); // Remove o status de funcionário
     setLoggedInUser(null);
+    setIsFuncionario(false);
     navigate('/login');
   };
 
   const navbarStyle = {
     backgroundColor: '#f8f9fa',
     borderBottom: '1px solid #dee2e6',
-    padding: '1rem 2rem',
+    padding: '1rem 3rem',
     position: 'sticky',
     top: 0,
     zIndex: 999,
@@ -50,83 +58,102 @@ const Navbar = () => {
     display: 'flex',
     alignItems: 'center',
     gap: '10px',
+    textDecoration: 'none', // Para o Link da marca
+    color: '#343a40',      // Cor da marca
   };
 
   const linksContainerStyle = {
     display: 'flex',
-    gap: '4rem',
-    marginRight: '20rem',
+    gap: '2rem', // Reduzido o gap para melhor encaixe
+    // marginRight: '20rem', // Removido ou ajustado se necessário
   };
 
   const authContainerStyle = {
     display: 'flex',
     alignItems: 'center',
     gap: '10px',
-    marginLeft: 'auto',
+    // marginLeft: 'auto', // Removido para centralizar melhor com o flex da navbar
   };
 
-  const getLinkStyle = (index) => ({
-    color: hoveredLink === index ? '#cf301d' : '#343a40',
+  const getLinkStyle = (isHovered) => ({ // Modificado para aceitar boolean
+    color: isHovered ? '#cf301d' : '#343a40',
     textDecoration: 'none',
     fontWeight: 600,
     transition: 'color 0.2s ease-in-out',
     fontSize: '1rem',
   });
 
-  const links = [
-    { href: '/fila-pedidos', label: 'PREPARANDO' },
-    { href: '/entrega', label: 'ENTREGA / RETIRADA' },
-    { href: '/cadastros', label: 'CADASTROS' },
+  // Links de funcionário
+  const funcionarioLinks = [
+    { to: '/fila-pedidos', label: 'PREPARANDO' },
+    { to: '/entrega-retirada', label: 'ENTREGA / RETIRADA' }, // Corrigido o 'to'
+    { to: '/cadastros', label: 'CADASTROS' },
   ];
 
   return (
     <nav style={navbarStyle}>
-      <div style={brandStyle}>
+      <Link to={isFuncionario ? "/fila-pedidos" : "/"} style={brandStyle}> {/* Link para home de funcionário ou cliente */}
         <img src={logo} alt="Logo" style={{ height: 40, width: 'auto' }} />
-        <span>Painel de Pedidos</span>
+        <span>{isFuncionario ? 'Gestão Pizzaria' : 'Vimatos Delivery'}</span>
+      </Link>
+
+      <div style={{ display: 'flex', alignItems: 'center', flexGrow: 1, justifyContent: 'center' }}>
+        {/* Renderiza os links de funcionário apenas se isFuncionario for true */}
+        {isFuncionario && (
+          <div style={linksContainerStyle}>
+            {funcionarioLinks.map((link, index) => (
+              <Link // Usar Link do react-router-dom
+                key={index}
+                to={link.to}
+                style={getLinkStyle(hoveredLink === index)}
+                onMouseEnter={() => setHoveredLink(index)}
+                onMouseLeave={() => setHoveredLink(null)}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '3rem' }}>
-        <div style={linksContainerStyle}>
-          {links.map((link, index) => (
-            <a
-              key={index}
-              href={link.href}
-              style={getLinkStyle(index)}
-              onMouseEnter={() => setHoveredLink(index)}
-              onMouseLeave={() => setHoveredLink(null)}
-            >
-              {link.label}
-            </a>
-          ))}
-        </div>
-        <div style={authContainerStyle}>
-          {loggedInUser ? (
-            <>
-              <span style={{ color: '#343a40' }}>Olá, {loggedInUser}!</span>
-              <button onClick={handleLogout} style={{
+
+      <div style={authContainerStyle}>
+        {loggedInUser ? (
+          <>
+            <span style={{ color: '#343a40', whiteSpace: 'nowrap' }}>Olá, {loggedInUser}!</span>
+            <button
+              onClick={handleLogout}
+              style={{
                 padding: '6px 12px',
                 backgroundColor: '#dc3545',
                 color: '#fff',
                 border: 'none',
                 borderRadius: '4px',
-                cursor: 'pointer'
-              }}>
-                Sair
-              </button>
-            </>
-          ) : (
-            <a
-              href="/login"
-              style={{
-                textDecoration: 'none',
-                fontWeight: '600',
-                color: '#343a40',
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
               }}
             >
-              Login
-            </a>
-          )}
-        </div>
+              Sair
+            </button>
+          </>
+        ) : (
+          <Link // Usar Link do react-router-dom
+            to="/login"
+            style={{
+              textDecoration: 'none',
+              fontWeight: '600',
+              color: '#343a40',
+              padding: '6px 12px',
+              backgroundColor: '#007bff',
+              color: '#fff',
+              borderRadius: '4px',
+              whiteSpace: 'nowrap',
+            }}
+            onMouseEnter={(e) => e.target.style.backgroundColor = '#0056b3'}
+            onMouseLeave={(e) => e.target.style.backgroundColor = '#007bff'}
+          >
+            Login
+          </Link>
+        )}
       </div>
     </nav>
   );
