@@ -42,3 +42,7 @@
 .custom-navbar .navbar-brand:hover img {
   filter: brightness(0.7);
 }
+
+#dropdownUsuario::after {
+  display: none !important;
+}
