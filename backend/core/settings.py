@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from dotenv import load_dotenv
 from pathlib import Path
+from django.conf import settings
+from datetime import timedelta
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -148,9 +150,43 @@ load_dotenv()  # Carrega as variáveis do .env
 
 ORS_API_KEY = os.getenv('ORS_API_KEY')
 
+SIMPLE_JWT = {
+    # Tempo de vida do Token de Acesso
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  # <== Exemplo: 1 hora
 
-from django.conf import settings
+    # Tempo de vida do Token de Atualização
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),     # <== Exemplo: 7 dias
 
-# ...
+    # --- Outras configurações (opcionais, mas comuns) ---
+    'ROTATE_REFRESH_TOKENS': False, # Se True, um novo refresh token é gerado a cada atualização
+    'BLACKLIST_AFTER_ROTATION': False, # Requer configuração adicional para blacklisting
+    'UPDATE_LAST_LOGIN': False, # Se True, atualiza o campo last_login do usuário
+
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY, # Garanta que SECRET_KEY está definida no seu settings.py
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+    'JWK_URL': None,
+    'LEEWAY': 0,
+
+    'AUTH_HEADER_TYPES': ('Bearer',), # Define como o token é enviado (ex: "Bearer <token>")
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+    'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+    'TOKEN_USER_CLASS': 'rest_framework_simplejwt.models.TokenUser',
+
+    'JTI_CLAIM': 'jti',
+
+    # Configurações para 'Sliding Tokens' (se você usar esse tipo)
+    # 'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    # 'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
+    # 'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+}
+
 ORS_API_KEY = '5b3ce3597851110001cf62482ac30d8552fa469eb422ccec480d3fcc'
 ORS_API_KEY = settings.ORS_API_KEY
