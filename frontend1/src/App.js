@@ -14,6 +14,7 @@ import Login from './components/Login';
 import FilaPedidos from './components/FilaPedidos'; 
 import EntregaRetirada from './components/EntregaRetirada';
 import Cadastros from './components/Cadastros';
+import ClienteEdit from './components/ClienteEdit'; // <<< ADICIONADO: Importa a nova tela
 
 function Home() {
   return (
@@ -40,6 +41,7 @@ function App() {
         <Route path="/fila-pedidos" element={<FilaPedidos nomeCliente="Amanda Beatriz" />} /> 
         <Route path="/entrega" element={<EntregaRetirada />} /> 
         <Route path="/cadastros" element={<Cadastros />} />
+        <Route path="/profile/edit" element={<ClienteEdit />} /> {/* <<< ADICIONADO: Rota para editar perfil */}
       </Routes>
     </Router>
   );

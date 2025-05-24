@@ -3,6 +3,7 @@ from . import views
 from .views import (
     AplicarDescontoPizzaView,
     FuncionarioListCreate, ClienteListCreate, MotoboyListCreate,
+    ClienteRetrieveUpdateDestroy,
     PizzaListCreate, BebidaListCreate, TaxaEntregaListCreate, 
     calcular_rota, buscar_cep_api,
 )
@@ -10,6 +11,7 @@ from .views import (
 urlpatterns = [
     path('funcionarios/', FuncionarioListCreate.as_view(), name='funcionario-list-create'),
     path('clientes/', ClienteListCreate.as_view(), name='cliente-list-create'),
+    path('clientes/<int:pk>/', ClienteRetrieveUpdateDestroy.as_view(), name='cliente-detail-update-destroy'),
     path('motoboys/', MotoboyListCreate.as_view(), name='motoboy-list-create'),
     path('pizzas/', PizzaListCreate.as_view(), name='pizza-list-create'),
     path('bebidas/', BebidaListCreate.as_view(), name='bebida-list-create'),

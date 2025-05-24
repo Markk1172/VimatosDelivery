@@ -1,3 +1,5 @@
+// frontend1/src/components/Login.jsx
+
 import React, { useState } from 'react';
 import backgroundImage from '../assets/img/login.jpg';
 import logo from '../assets/img/logo.png';
@@ -33,6 +35,10 @@ const Login = () => {
         localStorage.setItem('refreshToken', data.refresh_token);
         localStorage.setItem('userName', data.user_name);
         localStorage.setItem('userEmail', data.user_email);
+        // <<< ADICIONADO: Salva o cliente_id se ele existir
+        if (data.cliente_id) {
+            localStorage.setItem('clienteId', data.cliente_id);
+        }
 
         showMessage('Login realizado com sucesso!', 'success');
         navigate('/'); // Redirect to home page
@@ -69,6 +75,24 @@ const Login = () => {
       showMessage('Erro ao conectar com o servidor. Tente novamente mais tarde.', 'error');
     }
   };
+
+    // <<< ADICIONADO: Estilos para as mensagens
+    const messageStyles = {
+        position: 'fixed',
+        top: '20px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        padding: '10px 20px',
+        borderRadius: '5px',
+        color: 'white',
+        zIndex: 10000,
+        textAlign: 'center',
+        minWidth: '300px',
+    };
+
+    const successStyle = { ...messageStyles, backgroundColor: 'green' };
+    const errorStyle = { ...messageStyles, backgroundColor: 'red' };
+    // FIM ADICIONADO
 
   const cssStyles = `
     :root {
@@ -312,11 +336,19 @@ const Login = () => {
     >
       <style dangerouslySetInnerHTML={{ __html: cssStyles }} />
 
+        {/* <<< ADICIONADO: Exibição da Mensagem >>> */}
+        {message.text && (
+            <div style={message.type === 'success' ? successStyle : errorStyle}>
+                {message.text}
+            </div>
+        )}
+        {/* FIM ADICIONADO */}
+
       <div className={`container ${rightPanelActive ? "right-panel-active" : ""}`}>
         {/* Cadastro */}
         <div className="container__form container--signup" id="signup-form">
           <form onSubmit={handleRegister} className="form">
-            <h2 className="form__title">Cadastrar-se</h2>
+            <h2 className="form__title">Cadastro</h2>
             <input name="name" type="text" placeholder="Nome completo" className="input" required />
             <input name="email" type="email" placeholder="E-mail" className="input" required />
             <input name="phone" type="tel" placeholder="Telefone" className="input" required />

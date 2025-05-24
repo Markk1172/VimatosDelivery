@@ -1,3 +1,5 @@
+// src/components/Navbar.jsx
+
 import React, { useState, useEffect } from 'react';
 import logo from './../assets/img/logo.png';
 import '../assets/css/Navbar.css';
@@ -8,7 +10,6 @@ function Navbar() {
   const [loggedInUser, setLoggedInUser] = useState(null);
 
   useEffect(() => {
-    // Função para verificar o status de login
     const checkLoginStatus = () => {
       const userName = localStorage.getItem('userName');
       if (userName) {
@@ -17,39 +18,38 @@ function Navbar() {
         setLoggedInUser(null);
       }
     };
-
-    // Chama a função na montagem do componente
     checkLoginStatus();
-
-    // Adiciona um event listener para o evento 'storage'.
     window.addEventListener('storage', checkLoginStatus);
-
-    // Função de limpeza para remover o event listener quando o componente é desmontado
     return () => {
       window.removeEventListener('storage', checkLoginStatus);
     };
   }, []);
 
-  // Função para lidar com o logout
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('userName');
     localStorage.removeItem('userEmail');
+    localStorage.removeItem('clienteId');
     setLoggedInUser(null);
     navigate('/login');
+  };
+
+  const handleEditProfileClick = () => {
+    navigate('/profile/edit');
   };
 
   useEffect(() => {
     const handleScroll = () => {
       const navbar = document.getElementById("mainNav");
-      if (window.scrollY > 50) {
-        navbar.classList.add("scrolled");
-      } else {
-        navbar.classList.remove("scrolled");
+      if (navbar) {
+        if (window.scrollY > 50) {
+          navbar.classList.add("scrolled");
+        } else {
+          navbar.classList.remove("scrolled");
+        }
       }
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -79,7 +79,7 @@ function Navbar() {
             <li className="nav-item"><a className="nav-link" href="#team">Time</a></li>
             <li className="nav-item"><a className="nav-link" href="#contact">Contatos</a></li>
             <li className="nav-item">
-              {loggedInUser ? ( // Se o utilizador estiver logado
+              {loggedInUser ? (
                 <div className="nav-item d-flex align-items-center" style={{ gap: '6px' }}>
                   <span
                     className="nav-link px-0"
@@ -89,7 +89,10 @@ function Navbar() {
                       fontWeight: 'normal',
                       position: 'relative',
                       top: '0.7px',
+                      cursor: 'pointer',
+                      textDecoration: 'underline',
                     }}
+                    onClick={handleEditProfileClick}
                   >
                     Olá, {loggedInUser}!
                   </span>
@@ -100,7 +103,7 @@ function Navbar() {
                     Sair
                   </button>
                 </div>
-              ) : ( // Se o utilizador não estiver logado
+              ) : (
                 <Link to="/login" className="nav-link">Login</Link>
               )}
             </li>

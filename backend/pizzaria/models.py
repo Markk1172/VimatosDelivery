@@ -18,7 +18,7 @@ class Cliente(models.Model):
     nome = models.CharField(max_length=100)
     data_nasc = models.DateField()
     cpf = models.CharField(max_length=11, unique=True)
-    endereco = models.CharField(max_length=255)
+    endereco = models.CharField(max_length=255, blank=True, null=True)
     email = models.EmailField(unique=True)
     telefone = models.CharField(max_length=11)
 
@@ -40,7 +40,7 @@ class Motoboy(models.Model):
         return self.nome
 
 class Pizza(models.Model):
-    sabor = models.CharField(max_length=50)  # Valor livre, como você pediu
+    sabor = models.CharField(max_length=50)  
     TAMANHOS = [
         ('pequena', 'Pequena'),
         ('media', 'Média'),
