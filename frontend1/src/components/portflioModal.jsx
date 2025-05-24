@@ -45,7 +45,7 @@ const portfolioModals = [
     id: "portfolioModal5",
     title: "Chocolate",
     subtitle: "Doce, incrivel e colorida.",
-    img: "/assets/img/portfolio/5.png",
+    img: "/assets/img/portfolio/5.jpg",
     description:
       "Doce na medida certa! Coberta com uma camada cremosa de chocolate ao leite, finalizada com confeitos, é a escolha perfeita para os amantes de sobremesa. Irresistivelmente deliciosa do início ao fim.",
     client: "Southwest",
