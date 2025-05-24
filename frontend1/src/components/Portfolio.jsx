@@ -1,29 +1,22 @@
 import React from "react";
 
-// Se as imagens estiverem em public/assets/img/portfolio, use o caminho direto no src.
-// Se estiverem em src/assets/img/portfolio, importe assim:
-// import img1 from '../assets/img/portfolio/1.jpg';
-// import img2 from '../assets/img/portfolio/2.jpg';
-// import img3 from '../assets/img/portfolio/3.jpg';
-// ...etc
-
 const portfolioItems = [
   {
     title: "Calabresa",
     subtitle: "Classica, com cebola",
-    img: "/assets/img/portfolio/1.jpg",
+    img: "assets/img/portfolio/1.jpg",
     modal: "#portfolioModal1",
   },
   {
     title: "Portuguesa",
     subtitle: "Com ovos, presunto e muito pimentão",
-    img: "/assets/img/portfolio/2.jpg",
+    img: "assets/img/portfolio/2.jpg",
     modal: "#portfolioModal2",
   },
   {
     title: "Muçarela",
     subtitle: "Bem queijuda, oréganoza :)",
-    img: "/assets/img/portfolio/3.jpg",
+    img: "assets/img/portfolio/3.jpg",
     modal: "#portfolioModal3",
   },
   {
@@ -52,8 +45,8 @@ function Portfolio() {
     <section className="page-section bg-light" id="portfolio">
       <div className="container">
         <div className="text-center">
-          <h2 className="section-heading text-uppercase">Cardápio</h2>
-          <h3 className="section-subheading text-muted">Nossos campeões de vendas!</h3>
+          <h2 className="section-heading text-uppercase">Os Queridinhos</h2>
+          <h3 className="section-subheading text-muted">As estrelas do nosso cardápio que você precisa provar!</h3>
         </div>
         <div className="row">
           {portfolioItems.map((item, idx) => (
