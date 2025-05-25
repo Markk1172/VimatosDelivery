@@ -388,3 +388,8 @@ def calcular_rota(request):
         print(f"Erro ao processar resposta da API de rotas (OpenRouteService): {rota_dados if 'rota_dados' in locals() else 'Resposta não disponível'}, Erro: {e}")
         return JsonResponse({'erro': 'Erro ao processar a resposta da API de rotas.'}, status=500)
 
+class PizzaRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Pizza.objects.all()
+    serializer_class = PizzaSerializer
+    permission_classes = [IsAuthenticated, IsFuncionario]
+

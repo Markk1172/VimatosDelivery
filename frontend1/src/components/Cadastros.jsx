@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import logo from '../assets/img/logo.png';
 import { useNavigate, Link } from 'react-router-dom';
 
@@ -9,7 +9,6 @@ const Navbar = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Using v1's checkUserStatus as it includes isFuncionario
         const checkUserStatus = () => {
             const userName = localStorage.getItem('userName');
             const funcionarioStatus = localStorage.getItem('isFuncionario') === 'true';
@@ -24,28 +23,26 @@ const Navbar = () => {
         };
 
         checkUserStatus();
-        window.addEventListener('storage', checkUserStatus); // Ouve mudanças no localStorage
+        window.addEventListener('storage', checkUserStatus);
         return () => window.removeEventListener('storage', checkUserStatus);
     }, []);
 
     const handleLogout = () => {
-        // Using v1's handleLogout as it removes more items
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
         localStorage.removeItem('userName');
         localStorage.removeItem('userEmail');
         localStorage.removeItem('clienteId');
-        localStorage.removeItem('isFuncionario'); // From v1
+        localStorage.removeItem('isFuncionario');
         setLoggedInUser(null);
         setIsFuncionario(false);
         navigate('/login');
     };
 
-    // Merging styles, prioritizing v1 and ensuring flex layout works
     const navbarStyle = {
         backgroundColor: '#f8f9fa',
         borderBottom: '1px solid #dee2e6',
-        padding: '1rem 3rem', // Using v1's padding
+        padding: '1rem 3rem',
         position: 'sticky',
         top: 0,
         zIndex: 999,
@@ -62,20 +59,18 @@ const Navbar = () => {
         alignItems: 'center',
         gap: '10px',
         textDecoration: 'none', 
-        color: '#343a40',    
+        color: '#343a40',    
     };
 
     const linksContainerStyle = {
         display: 'flex',
         gap: '2rem', 
-        // 
     };
 
     const authContainerStyle = {
         display: 'flex',
         alignItems: 'center',
         gap: '10px',
-        // marginLeft: 'auto', // Removido para centralizar melhor com o flex da navbar
     };
 
     const getLinkStyle = (isHovered) => ({ 
@@ -86,10 +81,9 @@ const Navbar = () => {
         fontSize: '1rem',
     });
 
-    // Using v1's links and structure
     const funcionarioLinks = [
         { to: '/fila-pedidos', label: 'PREPARANDO' },
-        { to: '/entrega-retirada', label: 'ENTREGA / RETIRADA' }, // 
+        { to: '/entrega-retirada', label: 'ENTREGA / RETIRADA' }, 
         { to: '/cadastros', label: 'CADASTROS' },
     ];
 
@@ -104,7 +98,7 @@ const Navbar = () => {
                 {isFuncionario && (
                     <div style={linksContainerStyle}>
                         {funcionarioLinks.map((link, index) => (
-                            <Link // 
+                            <Link 
                                 key={index}
                                 to={link.to}
                                 style={getLinkStyle(hoveredLink === index)}
@@ -118,7 +112,6 @@ const Navbar = () => {
                 )}
             </div>
 
-            {/* Using v1's auth container and login/logout button */}
             <div style={authContainerStyle}>
                 {loggedInUser ? (
                     <>
@@ -139,12 +132,12 @@ const Navbar = () => {
                         </button>
                     </>
                 ) : (
-                    <Link // Using Link from v1 with improved styling
+                    <Link 
                         to="/login"
                         style={{
                             textDecoration: 'none',
                             fontWeight: '600',
-                            color: '#fff', // White text
+                            color: '#fff',
                             padding: '6px 12px',
                             backgroundColor: '#007bff',
                             borderRadius: '4px',
@@ -164,47 +157,171 @@ const Navbar = () => {
 
 const Cadastros = () => {
     const [categoria, setCategoria] = useState('');
+    const [currentMode, setCurrentMode] = useState('create'); 
     const [formData, setFormDataState] = useState({}); 
-    const [message, setMessage] = useState({ text: '', type: '' }); // From v1
-    const navigate = useNavigate(); // From v1
+    const [message, setMessage] = useState({ text: '', type: '' });
+    const [itemsList, setItemsList] = useState([]); 
+    const [editingItemId, setEditingItemId] = useState(null); 
+    const navigate = useNavigate();
 
-    // Using v1's showMessage
-    const showMessage = (text, type) => {
+    const showMessage = useCallback((text, type) => {
         setMessage({ text, type });
         setTimeout(() => setMessage({ text: '', type: '' }), 5000);
-    };
+    }, []);
 
-    // Using v1's handleCategoriaChange
     const handleCategoriaChange = (e) => {
         setCategoria(e.target.value);
         setFormDataState({});
+        setEditingItemId(null); 
+        setCurrentMode('create'); 
     };
 
-    // Merging handleInputChange from both
     const handleInputChange = (e) => {
-        const { name, value, type, files } = e.target;
+        const { name, value, type, files, checked } = e.target; 
         setFormDataState((prev) => ({
             ...prev,
-            [name]: type === 'file' ? files[0] : value,
+            [name]: type === 'file' ? files[0] : (type === 'checkbox' ? checked : value), 
         }));
     };
 
-    // Using v1's getApiEndpoint, adding 'entrega'
-    const getApiEndpoint = (cat) => {
+    const getApiEndpoint = useCallback((cat, itemId = null) => { 
+        let base = 'http://127.0.0.1:8000/api/';
+        let path = '';
         switch (cat) {
-            case 'pizza': return 'http://127.0.0.1:8000/api/pizzas/';
-            case 'bebida': return 'http://127.0.0.1:8000/api/bebidas/';
-            case 'funcionario': return 'http://127.0.0.1:8000/api/funcionarios/';
-            case 'motoboy': return 'http://127.0.0.1:8000/api/motoboys/';
-            case 'cupom': return 'http://127.0.0.1:8000/api/cupons/';
-            case 'entrega': return 'http://127.0.0.1:8000/api/taxas-entrega/'; // Endpoint hipotético para entrega
+            case 'pizza': path = 'pizzas/'; break;
+            case 'bebida': path = 'bebidas/'; break;
+            case 'funcionario': path = 'funcionarios/'; break;
+            case 'motoboy': path = 'motoboys/'; break;
+            case 'cupom': path = 'cupons/'; break;
+            case 'entrega': path = 'taxas-entrega/'; break;
             default: return '';
+        }
+        return itemId ? `${base}${path}${itemId}/` : `${base}${path}`; 
+    }, []); 
+
+    const fetchItems = useCallback(async (cat) => {
+        const accessToken = localStorage.getItem('accessToken');
+        if (!accessToken) {
+            showMessage('Sessão expirada. Faça login novamente.', 'error');
+            navigate('/login');
+            return;
+        }
+
+        const endpoint = getApiEndpoint(cat);
+        if (!endpoint) return;
+
+        try {
+            const response = await fetch(endpoint, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Accept': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setItemsList(data);
+            } else if (response.status === 401 || response.status === 403) {
+                showMessage('Você não tem permissão para listar esses itens.', 'error');
+                setItemsList([]);
+            } else {
+                showMessage(`Erro ao buscar ${cat}: ${response.statusText}`, 'error');
+                setItemsList([]);
+            }
+        } catch (error) {
+            console.error(`Erro na requisição GET para ${cat}:`, error);
+            showMessage('Erro de rede ou servidor ao buscar itens.', 'error');
+            setItemsList([]);
+        }
+    }, [getApiEndpoint, showMessage, navigate]);
+
+    useEffect(() => {
+        setFormDataState({}); 
+        setEditingItemId(null); 
+        setItemsList([]); 
+        if (categoria && currentMode === 'manage') {
+            fetchItems(categoria); 
+        }
+    }, [categoria, currentMode, fetchItems]);
+
+    const handleModeChange = (mode) => {
+        if (categoria !== 'pizza' && mode === 'manage') { 
+            showMessage('O modo de Gerenciamento (edição/exclusão) está disponível apenas para Pizzas no momento. Selecione "Pizza" para gerenciar.', 'info'); 
+            return; 
+        }
+        setCurrentMode(mode);
+        if (mode === 'manage') {
+            fetchItems(categoria); 
+        } else {
+            setFormDataState({}); 
+            setEditingItemId(null);
         }
     };
 
-    // Using v1's handleSubmit (API integrated), with potential for 'entrega'
+    const handleEdit = (item) => {
+        setEditingItemId(item.id);
+        setFormDataState({
+            ...item,
+            sabor: item.sabor, 
+            preco_original: item.preco_original, 
+            data_desconto: item.data_desconto ? item.data_desconto.slice(0, 16) : '',
+        });
+        setCurrentMode('create'); // mantém o modo edição
+    };
+
+    const handleDelete = async (id) => {
+        if (categoria !== 'pizza') { 
+            showMessage('A exclusão está disponível apenas para Pizzas no momento.', 'info');
+            return;
+        }
+        if (!window.confirm('Tem certeza que deseja excluir este item?')) {
+            return;
+        }
+        const accessToken = localStorage.getItem('accessToken');
+        if (!accessToken) {
+            showMessage('Acesso não autorizado. Faça login novamente.', 'error');
+            navigate('/login');
+            return;
+        }
+
+        const endpoint = getApiEndpoint(categoria, id);
+        try {
+            const response = await fetch(endpoint, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                },
+            });
+
+            if (response.status === 204) { 
+                showMessage(`${categoria.charAt(0).toUpperCase() + categoria.slice(1)} excluído(a) com sucesso!`, 'success');
+                fetchItems(categoria); 
+            } else if (response.status === 401 || response.status === 403) {
+                showMessage('Sua sessão expirou ou você não tem permissão para excluir.', 'error');
+                navigate('/login');
+            } else {
+                let errorData = { detail: `Erro ${response.status}: ${response.statusText}` };
+                try {
+                    const contentType = response.headers.get("content-type");
+                    if (contentType && contentType.indexOf("application/json") !== -1) {
+                         errorData = await response.json();
+                    } else {
+                        const textError = await response.text();
+                        errorData.detail = textError || errorData.detail;
+                    }
+                } catch (jsonError) { /* ignore */ }
+                showMessage(`Erro ao excluir ${categoria}: ${errorData.detail || response.statusText}`, 'error');
+            }
+        } catch (error) {
+            console.error(`Erro na requisição DELETE para ${categoria}:`, error);
+            showMessage('Erro de rede ou servidor ao excluir item.', 'error');
+        }
+    };
+
     const handleSubmit = async (e) => {
     e.preventDefault();
+
     const accessToken = localStorage.getItem('accessToken');
     if (!accessToken) {
         showMessage('Acesso não autorizado. Faça login novamente.', 'error');
@@ -212,118 +329,71 @@ const Cadastros = () => {
         return;
     }
 
-    const endpoint = getApiEndpoint(categoria);
-    if (!endpoint) {
-        showMessage('Categoria inválida selecionada.', 'error');
-        return;
-    }
+    const categoriesRequiringFormData = ['pizza', 'bebida', 'motoboy'];
+    const isUpdate = editingItemId !== null;
+    const method = isUpdate
+        ? (categoriesRequiringFormData.includes(categoria) ? 'PUT' : 'PATCH')
+        : 'POST';
+    const endpoint = isUpdate ? getApiEndpoint(categoria, editingItemId) : getApiEndpoint(categoria);
 
     let submissionBody;
     const requestHeaders = {
         'Authorization': `Bearer ${accessToken}`,
-        'Accept': 'application/json', // É uma boa prática incluir
+        'Accept': 'application/json',
     };
 
-    // Define quais categorias NECESSITAM de FormData (por causa de uploads de arquivo)
-    // Adicione ou remova categorias conforme seus formulários evoluem.
-    const categoriesRequiringFormData = ['pizza', 'bebida', 'motoboy'];
-
     if (categoriesRequiringFormData.includes(categoria)) {
-        // Usa FormData para categorias com arquivos
         submissionBody = new FormData();
         for (const key in formData) {
-            // Garante que valores nulos/undefined não sejam adicionados,
-            // exceto se for um arquivo (que pode ser opcional e vir como null)
             if (formData[key] !== null && formData[key] !== undefined) {
-                 submissionBody.append(key, formData[key]);
+                if (formData[key] instanceof File) {
+                    submissionBody.append(key, formData[key]);
+                } else if (typeof formData[key] === 'string' && formData[key].startsWith('/media/')) {
+                    // Não envia o caminho antigo da imagem
+                } else {
+                    submissionBody.append(key, formData[key]);
+                }
             }
         }
-        // Mapeamentos específicos para FormData (se necessário)
-        if (categoria === 'pizza' && formData.nome) submissionBody.set('sabor', formData.nome);
-        // Se o campo 'preco' no form de pizza deve ser 'preco_original' no backend:
-        if (categoria === 'pizza' && formData.preco) {
-            submissionBody.set('preco_original', formData.preco);
-            // Opcional: remova 'preco' se não for esperado pelo backend
-            // if (submissionBody.has('preco')) submissionBody.delete('preco');
-        }
-
-
-        // Não defina 'Content-Type' para FormData; o navegador faz isso automaticamente
-        // e inclui o 'boundary' correto.
-    } else {
-        // Usa JSON para outras categorias (ex: funcionario, cupom, entrega)
-        
-        // Crie uma cópia para não modificar o estado formData diretamente com os mapeamentos
+    } else { 
         const jsonData = { ...formData };
-
-        // Mapeamentos específicos para JSON
-        if (categoria === 'pizza' && jsonData.nome) { // Embora pizza use FormData, se fosse JSON:
-            jsonData.sabor = jsonData.nome;
-            // delete jsonData.nome; // Se 'nome' não for esperado, apenas 'sabor'
+        if (categoria === 'cupom') {
+            jsonData.ativo = formData.ativo === 'true';
         }
-        if (categoria === 'pizza' && jsonData.preco) { // Se fosse JSON:
-            jsonData.preco_original = jsonData.preco;
-            // delete jsonData.preco;
-        }
-
-        // Mapeamentos para 'entrega' (se for JSON)
-        if (categoria === 'entrega' && jsonData.local) {
-            jsonData.bairro = jsonData.local; // Supondo que o backend espera 'bairro'
-            // delete jsonData.local; // Remova se 'local' não for esperado
-        }
-        if (categoria === 'entrega' && jsonData.valorEntrega) {
-            jsonData.taxa = jsonData.valorEntrega; // Supondo que o backend espera 'taxa'
-            // delete jsonData.valorEntrega; // Remova se 'valorEntrega' não for esperado
-        }
-
-
         submissionBody = JSON.stringify(jsonData);
         requestHeaders['Content-Type'] = 'application/json';
     }
 
     try {
         const response = await fetch(endpoint, {
-            method: 'POST',
+            method: method,
             headers: requestHeaders,
             body: submissionBody,
         });
 
         if (response.ok) {
-            // Tenta parsear como JSON mesmo se o status for 204 No Content (algumas APIs fazem isso)
-            let responseData = {};
-            const contentType = response.headers.get("content-type");
-            if (contentType && contentType.indexOf("application/json") !== -1) {
-                responseData = await response.json();
-            } else if (response.status !== 204) { // Se não for JSON e não for 204, pode ser texto
-                const textResponse = await response.text();
-                console.log("Resposta não JSON recebida:", textResponse); // Log para debug
-            }
-
-            showMessage(`${categoria.charAt(0).toUpperCase() + categoria.slice(1)} cadastrado(a) com sucesso!`, 'success');
+            showMessage(`${categoria.charAt(0).toUpperCase() + categoria.slice(1)} ${isUpdate ? 'atualizado(a)' : 'cadastrado(a)'} com sucesso!`, 'success');
             setFormDataState({});
-            setCategoria('');
+            setEditingItemId(null);
+            setCurrentMode('manage');
+            fetchItems(categoria);
         } else if (response.status === 401 || response.status === 403) {
             showMessage('Sua sessão expirou ou você não tem permissão. Faça login novamente.', 'error');
             navigate('/login');
         } else {
-            // Tenta obter a mensagem de erro do JSON, senão usa o statusText
-            let errorData = { detail: `Erro ${response.status}: ${response.statusText}` }; // Default error
+            let errorData = { detail: `Erro ${response.status}: ${response.statusText}` };
             try {
                 const contentType = response.headers.get("content-type");
                 if (contentType && contentType.indexOf("application/json") !== -1) {
-                     errorData = await response.json();
+                    errorData = await response.json();
                 } else {
-                    // Se não for JSON, tenta ler como texto para dar mais detalhes
                     const textError = await response.text();
-                    errorData.detail = textError || errorData.detail; // Usa o texto se houver
+                    errorData.detail = textError || errorData.detail;
                 }
-            } catch (jsonError) {
-                console.error("Erro ao fazer parse do JSON de erro:", jsonError);
-                // Mantém o errorData default se o parse do JSON de erro falhar
-            }
+            } catch (jsonError) { console.error("Erro ao fazer parse do JSON de erro:", jsonError); }
             
-            let backendError = errorData.detail || ''; // 'detail' é comum no DRF
-            if (typeof errorData === 'object' && !backendError) { // Se não houver 'detail', tenta montar a partir dos campos
+            let backendError = errorData.detail || '';
+            if (typeof errorData === 'object' && !backendError) {
                 for (const key in errorData) {
                     if (Array.isArray(errorData[key])) {
                         backendError += `${key}: ${errorData[key].join(', ')} `;
@@ -332,7 +402,7 @@ const Cadastros = () => {
                     }
                 }
             }
-            showMessage(`Erro ao cadastrar ${categoria}: ${backendError || response.statusText}`, 'error');
+            showMessage(`Erro ao ${isUpdate ? 'atualizar' : 'cadastrar'} ${categoria}: ${backendError || response.statusText}`, 'error');
         }
     } catch (error) {
         console.error(`Erro na requisição para ${categoria}:`, error);
@@ -340,7 +410,6 @@ const Cadastros = () => {
     }
 };
 
-    // Using v1's styles as they are more detailed, with minor adjustments.
     const pageStyle = {
         backgroundColor: '#E9E9E9',
         minHeight: '100vh',
@@ -348,7 +417,7 @@ const Cadastros = () => {
     };
 
     const formContainerStyle = {
-        maxWidth: '500px',
+        maxWidth: '700px', 
         margin: '2rem auto',
         padding: '2rem',
         borderRadius: '12px',
@@ -357,13 +426,13 @@ const Cadastros = () => {
         fontFamily: 'Arial, sans-serif',
         display: 'flex',
         flexDirection: 'column',
-        gap: '1.5rem', // v1 gap
+        gap: '1.5rem',
     };
 
-    const inputStyle = { padding: '0.75rem', borderRadius: '6px', border: '1px solid #ccc', fontSize: '1rem' }; // v1 style
+    const inputStyle = { padding: '0.75rem', borderRadius: '6px', border: '1px solid #ccc', fontSize: '1rem' };
     const formStyle = { display: 'flex', flexDirection: 'column', gap: '1rem' };
 
-    const btnStyle = { // v1 style
+    const btnStyle = {
         backgroundColor: '#28a745',
         borderRadius: '8px',
         border: 'none',
@@ -379,8 +448,11 @@ const Cadastros = () => {
         alignSelf: 'center',
         width: '100%',
     };
+    const deleteBtnStyle = { ...btnStyle, backgroundColor: '#dc3545', marginTop: '0.5rem', width: 'auto' }; 
+    const editBtnStyle = { ...btnStyle, backgroundColor: '#007bff', marginTop: '0.5rem', marginRight: '0.5rem', width: 'auto' }; 
+    const backBtnStyle = { ...btnStyle, backgroundColor: '#6c757d', marginTop: '1rem', width: 'auto' }; 
 
-    // Using v1's feedback styles
+
     const messageFeedbackStyles = {
         position: 'fixed',
         top: '80px',
@@ -397,35 +469,61 @@ const Cadastros = () => {
     const successFeedbackStyle = { ...messageFeedbackStyles, backgroundColor: 'green' };
     const errorFeedbackStyle = { ...messageFeedbackStyles, backgroundColor: 'red' };
 
-    return (
-        <div style={pageStyle}>
-            <Navbar /> {/* Render the merged Navbar */}
-            {message.text && (
-                <div style={message.type === 'success' ? successFeedbackStyle : errorFeedbackStyle}>
-                    {message.text}
-                </div>
-            )}
-            <div style={formContainerStyle}>
-                {/* Using v1's h2 style with slight adjustment from v2 */}
-                <h2 style={{ fontFamily: 'Arial, sans-serif', fontWeight: 700, fontSize: '2rem', textAlign: 'center', color: '#333' }} >Cadastros</h2>
+    const tableContainerStyle = { 
+        marginTop: '2rem',
+        maxWidth: '700px', 
+        margin: '2rem auto', 
+        maxHeight: '400px', 
+        overflowY: 'auto', 
+        border: '1px solid #dee2e6',
+        borderRadius: '8px',
+        backgroundColor: '#fff',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)',
+    };
 
-                {/* Merging select options */}
-                <select value={categoria} onChange={handleCategoriaChange} style={{ marginBottom: '1rem', ...inputStyle }}>
-                    <option value="">Selecione uma categoria para cadastrar</option>
-                    <option value="pizza">Pizza</option>
-                    <option value="bebida">Bebida</option>
-                    <option value="funcionario">Funcionário</option>
-                    <option value="motoboy">Motoboy</option>
-                    <option value="cupom">Cupom de Desconto</option>
-                    <option value="entrega">Taxa de Entrega</option> {/* Added from v2 */}
-                </select>
+    const tableStyle = { 
+        width: '100%',
+        borderCollapse: 'collapse',
+    };
 
-                {/* Pizza Form - Merged */}
-                {categoria === 'pizza' && (
-                    <form onSubmit={handleSubmit} style={formStyle}>
-                        <label>Nome da Pizza</label>
-                        <input name="nome" value={formData.nome || ''} placeholder="Ex: Calabresa" onChange={handleInputChange} style={inputStyle} required />
-                        {/* Adding Tamanho from v2, but needs name matching API */}
+    const thTdStyle = { 
+        padding: '12px 15px',
+        borderBottom: '1px solid #dee2e6',
+        textAlign: 'left',
+    };
+
+    const thStyle = { 
+        ...thTdStyle,
+        backgroundColor: '#f2f2f2',
+        fontWeight: 'bold',
+    };
+
+    const tdStyle = { 
+        ...thTdStyle,
+        verticalAlign: 'middle', 
+    };
+
+    const actionsContainerStyle = { 
+        display: 'flex',
+        justifyContent: 'center',
+        gap: '10px',
+        marginTop: '1rem',
+    };
+
+    const renderForm = () => {
+        const getPriceFieldName = () => {
+            if (categoria === 'pizza') return 'preco_original';
+            if (categoria === 'bebida') return 'preco';
+            return 'preco'; 
+        };
+        const priceFieldName = getPriceFieldName(); 
+
+        switch (categoria) {
+            case 'pizza':
+                return (
+                    <>
+                        <label>Sabor da Pizza</label>
+                        <input name="sabor" value={formData.sabor || ''} placeholder="Ex: Calabresa" onChange={handleInputChange} style={inputStyle} required readOnly={editingItemId !== null} />
                         <label>Tamanho</label>
                         <select name="tamanho" value={formData.tamanho || ''} onChange={handleInputChange} style={inputStyle} required>
                             <option value="">Selecione o tamanho</option>
@@ -434,94 +532,134 @@ const Cadastros = () => {
                             <option value="grande">Grande</option>
                         </select>
                         <label>Foto da Pizza</label>
-                        <input type="file" name="imagem" accept="image/*" onChange={handleInputChange} style={inputStyle} /> {/* Using 'imagem' from v1 */}
+                        {editingItemId && formData.imagem && typeof formData.imagem === 'string' && ( 
+                             <p>Imagem atual: <a href={formData.imagem} target="_blank" rel="noopener noreferrer">Visualizar</a></p>
+                        )}
+                        <input type="file" name="imagem" accept="image/*" onChange={handleInputChange} style={inputStyle} />
                         <label>Ingredientes</label>
-                        <input name="ingredientes" value={formData.ingredientes || ''} placeholder="Ex: Calabresa, cebola, mussarela" onChange={handleInputChange} style={inputStyle} required />
-                        <label>Preço (R$)</label>
-                        <input type="number" name="preco_original" value={formData.preco_original || ''} placeholder="Ex: 39.90" step="0.01" onChange={handleInputChange} style={inputStyle} required /> {/* Using 'preco_original' from v1 */}
-                        <button type="submit" style={btnStyle}>Salvar Pizza</button>
-                    </form>
-                )}
-
-                {/* Bebida Form - Merged (Using v1's select for tamanho) */}
-                {categoria === 'bebida' && (
-                    <form onSubmit={handleSubmit} style={formStyle}>
+                        <input name="ingredientes" value={formData.ingredientes || ''} placeholder="Ex: Calabresa, cebola, mussarela" onChange={handleInputChange} style={inputStyle} />
+                        <label>Preço Original (R$)</label>
+                        <input type="number" name="preco_original" value={formData.preco_original || ''} placeholder="Ex: 39.90" step="0.01" onChange={handleInputChange} style={inputStyle} required />
+                        <label>Preço Promocional (Opcional, R$)</label>
+                        <input type="number" name="preco_promocional" value={formData.preco_promocional || ''} placeholder="Ex: 35.00" step="0.01" onChange={handleInputChange} style={inputStyle} />
+                        <label>Data de Desconto (Opcional)</label>
+                        <input type="datetime-local" name="data_desconto" value={formData.data_desconto ? formData.data_desconto.slice(0, 16) : ''} onChange={handleInputChange} style={inputStyle} />
+                    </>
+                );
+            case 'bebida':
+                return (
+                    <>
                         <label>Nome da Bebida</label>
-                        <input name="sabor" value={formData.sabor || ''} placeholder="Ex: Coca-Cola" onChange={handleInputChange} style={inputStyle} required /> {/* Using 'sabor' from v1 */}
+                        <input name="sabor" value={formData.sabor || ''} placeholder="Ex: Coca-Cola" onChange={handleInputChange} style={inputStyle} required />
                         <label>Foto da Bebida</label>
-                        <input type="file" name="imagem" accept="image/*" onChange={handleInputChange} style={inputStyle} /> {/* Using 'imagem' from v1 */}
+                         {editingItemId && formData.imagem && typeof formData.imagem === 'string' && ( 
+                             <p>Imagem atual: <a href={formData.imagem} target="_blank" rel="noopener noreferrer">Visualizar</a></p>
+                        )}
+                        <input type="file" name="imagem" accept="image/*" onChange={handleInputChange} style={inputStyle} />
                         <label>Tamanho</label>
-                        <select name="tamanho" value={formData.tamanho || ''} onChange={handleInputChange} style={inputStyle} required> {/* Using v1's select */}
+                        <select name="tamanho" value={formData.tamanho || ''} onChange={handleInputChange} style={inputStyle} required>
                             <option value="">Selecione o tamanho</option>
                             <option value="latinha">Latinha</option>
                             <option value="600ml">600ML</option>
                             <option value="1l">1L</option>
+                            <option value="1.5l">1.5L</option>
                             <option value="2l">2L</option>
                         </select>
-                        {/* If 'Quantidade (ml)' from v2 is crucial, it needs to be added and handled by API */ }
-                        {/* <label>Quantidade (ml)</label> */ }
-                        {/* <input type="number" name="quantidadeMl" value={formData.quantidadeMl || ''} placeholder="Ex: 350" onChange={handleInputChange} style={inputStyle} /> */ }
                         <label>Preço (R$)</label>
                         <input type="number" name="preco" value={formData.preco || ''} placeholder="Ex: 6.00" step="0.01" onChange={handleInputChange} style={inputStyle} required />
-                        <button type="submit" style={btnStyle}>Salvar Bebida</button>
-                    </form>
-                )}
-
-                {/* Funcionario Form - Using v1 (more detailed) */}
-                {categoria === 'funcionario' && (
-                    <form onSubmit={handleSubmit} style={formStyle}>
-                        <label>Nome do Funcionário</label>
-                        <input name="nome" value={formData.nome || ''} placeholder="Ex: João Silva" onChange={handleInputChange} style={inputStyle} required />
-                        <label>CPF</label>
-                        <input name="cpf" value={formData.cpf || ''} placeholder="Somente números" pattern="\d{11}" onChange={handleInputChange} style={inputStyle} required />
-                        <label>Telefone</label>
-                        <input name="telefone" value={formData.telefone || ''} type="tel" placeholder="Ex: (61) 99999-0000" pattern="\d{10,11}" onChange={handleInputChange} style={inputStyle} required />
-                        <label>Email</label>
-                        <input name="email" value={formData.email || ''} type="email" placeholder="email@example.com" onChange={handleInputChange} style={inputStyle} required />
-                        <label>Cargo</label>
-                        <input name="cargo" value={formData.cargo || ''} placeholder="Ex: Atendente" onChange={handleInputChange} style={inputStyle} required />
-                        <label>Nome de Usuário (para login)</label>
-                        <input name="username" value={formData.username || ''} placeholder="Login do funcionário" onChange={handleInputChange} style={inputStyle} required />
-                        <label>Senha (para login)</label>
-                        <input name="password" type="password" placeholder="Senha de acesso" onChange={handleInputChange} style={inputStyle} required />
-                        {/* Keep commented or add if needed: <label>Foto do Documento (RG ou CNH)</label> */}
-                        {/* <input type="file" name="fotoDocumento" accept="image/*" onChange={handleInputChange} style={inputStyle} /> */}
-                        <button type="submit" style={btnStyle}>Salvar Funcionário</button>
-                    </form>
-                )}
-
-                {/* Motoboy Form - Using v1 (more detailed) */}
-                {categoria === 'motoboy' && (
-                    <form onSubmit={handleSubmit} style={formStyle}>
-                        <label>Nome do Motoboy</label>
-                        <input name="nome" value={formData.nome || ''} placeholder="Ex: Carlos Souza" onChange={handleInputChange} style={inputStyle} required />
-                        <label>CPF</label>
-                        <input name="cpf" value={formData.cpf || ''} placeholder="Somente números" pattern="\d{11}" onChange={handleInputChange} style={inputStyle} required />
-                        <label>Telefone</label>
-                        <input name="telefone" value={formData.telefone || ''} type="tel" placeholder="Ex: (61) 98888-7777" pattern="\d{10,11}" onChange={handleInputChange} style={inputStyle} required />
-                        <label>Email</label>
-                        <input name="email" value={formData.email || ''} type="email" placeholder="email@example.com" onChange={handleInputChange} style={inputStyle} required />
-                        <label>Data de Nascimento</label>
-                        <input type="date" name="data_nasc" value={formData.data_nasc || ''} onChange={handleInputChange} style={inputStyle} required />
-                        <label>Placa da Moto</label>
-                        <input name="placa_moto" value={formData.placa_moto || ''} placeholder="Ex: ABC-1234" onChange={handleInputChange} style={inputStyle} required />
-                        <label>Nome de Usuário (para login)</label>
-                        <input name="username" value={formData.username || ''} placeholder="Login do motoboy" onChange={handleInputChange} style={inputStyle} required />
-                        <label>Senha (para login)</label>
-                        <input name="password" type="password" placeholder="Senha de acesso" onChange={handleInputChange} style={inputStyle} required />
-                        <label>Foto da CNH</label>
-                        <input type="file" name="foto_cnh" accept="image/*" onChange={handleInputChange} style={inputStyle} />
-                        <label>Foto do Documento da Moto</label>
-                        <input type="file" name="doc_moto" accept="image/*" onChange={handleInputChange} style={inputStyle} />
-                        <button type="submit" style={btnStyle}>Salvar Motoboy</button>
-                    </form>
-                )}
-
-                {/* Cupom Form - Using v1 (more detailed) */}
-                {categoria === 'cupom' && (
-                    <form onSubmit={handleSubmit} style={formStyle}>
+                    </>
+                );
+            case 'funcionario':
+                return (
+                    <>
+                        {editingItemId ? ( 
+                            <>
+                                <label>Nome do Funcionário</label>
+                                <input name="nome" value={formData.nome || ''} placeholder="Ex: João Silva" onChange={handleInputChange} style={inputStyle} required />
+                                <label>Email</label>
+                                <input name="email" value={formData.email || ''} type="email" placeholder="email@example.com" onChange={handleInputChange} style={inputStyle} required />
+                                <label>Telefone</label>
+                                <input name="telefone" value={formData.telefone || ''} type="tel" placeholder="Ex: (61) 99999-0000" pattern="\d{10,11}" onChange={handleInputChange} style={inputStyle} required />
+                                <label>Cargo</label>
+                                <input name="cargo" value={formData.cargo || ''} placeholder="Ex: Atendente" onChange={handleInputChange} style={inputStyle} required />
+                            </>
+                        ) : (
+                            <>
+                                <label>Nome do Funcionário</label>
+                                <input name="nome" value={formData.nome || ''} placeholder="Ex: João Silva" onChange={handleInputChange} style={inputStyle} required />
+                                <label>CPF</label>
+                                <input name="cpf" value={formData.cpf || ''} placeholder="Somente números" pattern="\d{11}" onChange={handleInputChange} style={inputStyle} required />
+                                <label>Telefone</label>
+                                <input name="telefone" value={formData.telefone || ''} type="tel" placeholder="Ex: (61) 99999-0000" pattern="\d{10,11}" onChange={handleInputChange} style={inputStyle} required />
+                                <label>Email</label>
+                                <input name="email" value={formData.email || ''} type="email" placeholder="email@example.com" onChange={handleInputChange} style={inputStyle} required />
+                                <label>Cargo</label>
+                                <input name="cargo" value={formData.cargo || ''} placeholder="Ex: Atendente" onChange={handleInputChange} style={inputStyle} required />
+                                <label>Nome de Usuário (para login)</label>
+                                <input name="username" value={formData.username || ''} placeholder="Login do funcionário" onChange={handleInputChange} style={inputStyle} required />
+                                <label>Senha (para login)</label>
+                                <input name="password" type="password" placeholder="Senha de acesso" onChange={handleInputChange} style={inputStyle} required />
+                            </>
+                        )}
+                    </>
+                );
+            case 'motoboy':
+                return (
+                    <>
+                         {editingItemId ? ( 
+                            <>
+                                <label>Nome do Motoboy</label>
+                                <input name="nome" value={formData.nome || ''} placeholder="Ex: Carlos Souza" onChange={handleInputChange} style={inputStyle} required />
+                                <label>Email</label>
+                                <input name="email" value={formData.email || ''} type="email" placeholder="email@example.com" onChange={handleInputChange} style={inputStyle} required />
+                                <label>Telefone</label>
+                                <input name="telefone" value={formData.telefone || ''} type="tel" placeholder="Ex: (61) 98888-7777" pattern="\d{10,11}" onChange={handleInputChange} style={inputStyle} required />
+                                <label>Data de Nascimento</label>
+                                <input type="date" name="data_nasc" value={formData.data_nasc || ''} onChange={handleInputChange} style={inputStyle} required />
+                                <label>Placa da Moto</label>
+                                <input name="placa_moto" value={formData.placa_moto || ''} placeholder="Ex: ABC-1234" onChange={handleInputChange} style={inputStyle} required />
+                                <label>Foto da CNH</label>
+                                {editingItemId && formData.foto_cnh && typeof formData.foto_cnh === 'string' && ( 
+                                     <p>CNH atual: <a href={formData.foto_cnh} target="_blank" rel="noopener noreferrer">Visualizar</a></p>
+                                )}
+                                <input type="file" name="foto_cnh" accept="image/*" onChange={handleInputChange} style={inputStyle} />
+                                <label>Foto do Documento da Moto</label>
+                                {editingItemId && formData.doc_moto && typeof formData.doc_moto === 'string' && ( 
+                                     <p>Doc. Moto atual: <a href={formData.doc_moto} target="_blank" rel="noopener noreferrer">Visualizar</a></p>
+                                )}
+                                <input type="file" name="doc_moto" accept="image/*" onChange={handleInputChange} style={inputStyle} />
+                            </>
+                        ) : (
+                            <>
+                                <label>Nome do Motoboy</label>
+                                <input name="nome" value={formData.nome || ''} placeholder="Ex: Carlos Souza" onChange={handleInputChange} style={inputStyle} required />
+                                <label>CPF</label>
+                                <input name="cpf" value={formData.cpf || ''} placeholder="Somente números" pattern="\d{11}" onChange={handleInputChange} style={inputStyle} required />
+                                <label>Telefone</label>
+                                <input name="telefone" value={formData.telefone || ''} type="tel" placeholder="Ex: (61) 98888-7777" pattern="\d{10,11}" onChange={handleInputChange} style={inputStyle} required />
+                                <label>Email</label>
+                                <input name="email" value={formData.email || ''} type="email" placeholder="email@example.com" onChange={handleInputChange} style={inputStyle} required />
+                                <label>Data de Nascimento</label>
+                                <input type="date" name="data_nasc" value={formData.data_nasc || ''} onChange={handleInputChange} style={inputStyle} required />
+                                <label>Placa da Moto</label>
+                                <input name="placa_moto" value={formData.placa_moto || ''} placeholder="Ex: ABC-1234" onChange={handleInputChange} style={inputStyle} required />
+                                <label>Nome de Usuário (para login)</label>
+                                <input name="username" value={formData.username || ''} placeholder="Login do motoboy" onChange={handleInputChange} style={inputStyle} required />
+                                <label>Senha (para login)</label>
+                                <input name="password" type="password" placeholder="Senha de acesso" onChange={handleInputChange} style={inputStyle} required />
+                                <label>Foto da CNH</label>
+                                <input type="file" name="foto_cnh" accept="image/*" onChange={handleInputChange} style={inputStyle} />
+                                <label>Foto do Documento da Moto</label>
+                                <input type="file" name="doc_moto" accept="image/*" onChange={handleInputChange} style={inputStyle} />
+                            </>
+                        )}
+                    </>
+                );
+            case 'cupom':
+                return (
+                    <>
                         <label htmlFor="codigo">Código do Cupom</label>
-                        <input id="codigo" name="codigo" value={formData.codigo || ''} placeholder="Ex: PROMO20" onChange={handleInputChange} style={inputStyle} required />
+                        <input id="codigo" name="codigo" value={formData.codigo || ''} placeholder="Ex: PROMO20" onChange={handleInputChange} style={inputStyle} required={!editingItemId} readOnly={editingItemId !== null && categoria === 'pizza'} /> 
                         <label htmlFor="percentual_desconto">Porcentagem de Desconto (%)</label>
                         <input id="percentual_desconto" type="number" name="percentual_desconto" value={formData.percentual_desconto || ''} placeholder="Ex: 10 (para 10%)" min="0.01" max="100" step="0.01" onChange={handleInputChange} style={inputStyle} required />
                         <label htmlFor="data_validade">Data de Validade</label>
@@ -531,23 +669,165 @@ const Cadastros = () => {
                             <option value="true">Sim</option>
                             <option value="false">Não</option>
                         </select>
-                        <button type="submit" style={btnStyle}>Salvar Cupom</button>
+                    </>
+                );
+            case 'entrega': // TaxaEntrega
+                return (
+                    <>
+                        <label>Local de Entrega (Bairro/Região)</label>
+                        <input name="local" value={formData.local || ''} placeholder="Ex: Asa Sul, Lago Norte, Setor Oeste" onChange={handleInputChange} style={inputStyle} required={!editingItemId} readOnly={editingItemId !== null && categoria === 'pizza'} /> 
+                        <label>Valor da Entrega (R$)</label>
+                        <input type="number" name="valor" value={formData.valor || ''} placeholder="Ex: 5.00" step="0.01" onChange={handleInputChange} style={inputStyle} required />
+                    </>
+                );
+            default:
+                return null;
+        }
+    };
+
+    const renderItemList = () => {
+        if (itemsList.length === 0) {
+            return <p style={{ textAlign: 'center', marginTop: '1rem' }}>Nenhum item cadastrado nesta categoria.</p>;
+        }
+
+        const getDisplayValue = (item, category) => {
+            switch (category) {
+                case 'pizza': return `${item.sabor} (${item.tamanho}) - R$ ${item.preco_original}`;
+                case 'bebida': return `${item.sabor} (${item.tamanho}) - R$ ${item.preco}`;
+                case 'funcionario': return `${item.nome} (${item.cargo})`;
+                case 'motoboy': return `${item.nome} (${item.placa_moto})`;
+                case 'cupom': return `${item.codigo} (${item.percentual_desconto}%) - Val: ${item.data_validade}`;
+                case 'entrega': return `${item.local}: R$ ${item.valor}`;
+                default: return JSON.stringify(item); // Fallback
+            }
+        };
+
+        return (
+            <div style={tableContainerStyle}>
+                <table style={tableStyle}>
+                    <thead>
+                        <tr>
+                            <th style={thStyle}>Item</th>
+                            <th style={thStyle}>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {itemsList.map((item) => (
+                            <tr key={item.id}>
+                                <td style={tdStyle}>{getDisplayValue(item, categoria)}</td>
+                                <td style={tdStyle}>
+                                    {['pizza', 'bebida', 'funcionario', 'motoboy'].includes(categoria) && (
+    <>
+      <button
+        onClick={() => handleEdit(item)}
+        style={editBtnStyle}
+      >
+        Editar
+      </button>
+      {categoria === 'pizza' && (
+        <button
+          onClick={() => handleDelete(item.id)}
+          style={deleteBtnStyle}
+        >
+          Excluir
+        </button>
+      )}
+    </>
+  )}
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        );
+    };
+
+    return (
+        <div style={pageStyle}>
+            <Navbar /> 
+            {message.text && (
+                <div style={message.type === 'success' ? successFeedbackStyle : errorFeedbackStyle}>
+                    {message.text}
+                </div>
+            )}
+            <div style={formContainerStyle}>
+                <h2 style={{ fontFamily: 'Arial, sans-serif', fontWeight: 700, fontSize: '2rem', textAlign: 'center', color: '#333' }} >
+                    {categoria ? 
+                        (currentMode === 'create' ? 
+                            (editingItemId ? `Editar ${categoria.charAt(0).toUpperCase() + categoria.slice(1)}` : `Cadastrar ${categoria.charAt(0).toUpperCase() + categoria.slice(1)}`) 
+                            : `Gerenciar ${categoria.charAt(0).toUpperCase() + categoria.slice(1)}s`
+                        ) : 'Cadastros'
+                    }
+                </h2>
+
+                <select value={categoria} onChange={handleCategoriaChange} style={{ marginBottom: '1rem', ...inputStyle }}>
+                    <option value="">Selecione uma categoria para cadastrar</option>
+                    <option value="pizza">Pizza</option>
+                    <option value="bebida">Bebida</option>
+                    <option value="funcionario">Funcionário</option>
+                    <option value="motoboy">Motoboy</option>
+                    <option value="cupom">Cupom de Desconto</option>
+                    <option value="entrega">Taxa de Entrega</option> 
+                </select>
+
+                {categoria && ( 
+                    <div style={actionsContainerStyle}>
+                        <button
+                            onClick={() => {
+                                setCurrentMode('create');
+                                setEditingItemId(null); // só limpa aqui!
+                                setFormDataState({});
+                            }}
+                            style={{ ...btnStyle, backgroundColor: currentMode === 'create' ? '#007bff' : '#6c757d', width: 'auto' }}
+                        >
+                            Cadastrar Novo
+                        </button>
+                        {['pizza', 'bebida', 'funcionario', 'motoboy'].includes(categoria) && (
+                          <button
+                            onClick={() => handleModeChange('manage')}
+                            style={{ ...btnStyle, backgroundColor: currentMode === 'manage' ? '#007bff' : '#6c757d', width: 'auto' }}
+                          >
+                            Gerenciar Existentes
+                          </button>
+                        )}
+                    </div>
+                )}
+                
+                {categoria && currentMode === 'create' && ( 
+                    <form onSubmit={handleSubmit} style={formStyle}>
+                        {renderForm()} 
+                        <button type="submit" style={btnStyle}>
+                            {editingItemId ? 'Atualizar' : 'Salvar'} {categoria.charAt(0).toUpperCase() + categoria.slice(1)} 
+                        </button>
+                         {editingItemId && ( 
+                            <button type="button" onClick={() => {
+                                setEditingItemId(null);
+                                setFormDataState({});
+                                setCurrentMode('manage');
+                                fetchItems(categoria);
+                            }} style={backBtnStyle}>
+                                Cancelar Edição
+                            </button>
+                        )}
                     </form>
                 )}
 
-                {/* Entrega Form - Added from v2, adapted to v1 style/logic */}
-                {categoria === 'entrega' && (
-                    <form onSubmit={handleSubmit} style={formStyle}>
-                        <label>Local de Entrega (Bairro/Região)</label>
-                        <input name="local" value={formData.local || ''} placeholder="Ex: Asa Sul, Lago Norte, Setor Oeste" onChange={handleInputChange} style={inputStyle} required />
-                        <label>Valor da Entrega (R$)</label>
-                        <input type="number" name="valor" value={formData.valor || ''} placeholder="Ex: 5.00" step="0.01" onChange={handleInputChange} style={inputStyle} required />
-                        <button type="submit" style={btnStyle}>Salvar Taxa de Entrega</button>
-                    </form>
+                {categoria && currentMode === 'manage' && ( 
+                    <>
+                        <h3 style={{ textAlign: 'center', marginTop: '1rem', color: '#555' }}>Lista de {categoria.charAt(0).toUpperCase() + categoria.slice(1)}</h3> 
+                        {renderItemList()} 
+                        <button
+                            onClick={() => handleModeChange('create')} 
+                            style={backBtnStyle} 
+                        >
+                            Voltar para Cadastrar Novo
+                        </button>
+                    </>
                 )}
             </div>
         </div>
     );
 };
 
-export default Cadastros; // Export the merged Cadastros component
+export default Cadastros;

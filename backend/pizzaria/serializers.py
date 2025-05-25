@@ -306,7 +306,6 @@ class PizzaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pizza
         fields = '__all__'
-        # Adicionar validação para preco_promocional se necessário (ex: não ser maior que preco_original)
 
 class BebidaSerializer(serializers.ModelSerializer):
     class Meta:
