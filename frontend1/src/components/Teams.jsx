@@ -22,8 +22,8 @@ const teamMembers = [
         role: "Desenvolvedor Front-End",
         img: img2,
         socials: [
-            { icon: "fab fa-github", label: "GitHub Profile", href: "#!" },
-            { icon: "fab fa-linkedin-in", label: "LinkedIn Profile", href: "#!" },
+            { icon: "fab fa-github", label: "GitHub Profile", href: "https://github.com/SmankyR" },
+            { icon: "fab fa-linkedin-in", label: "LinkedIn Profile", href: "https://br.linkedin.com/in/gabriel-olivera-2795732b6/" },
         ],
     },
     {
@@ -31,8 +31,8 @@ const teamMembers = [
         role: "Administrador de Banco de Dados",
         img: img3,
         socials: [
-            { icon: "fab fa-github", label: "GitHub Profile", href: "#!" },
-            { icon: "fab fa-linkedin-in", label: "LinkedIn Profile", href: "#!" },
+            { icon: "fab fa-github", label: "GitHub Profile", href: "https://github.com/GuxtaDelas" },
+            { icon: "fab fa-linkedin-in", label: "LinkedIn Profile", href: "https://br.linkedin.com/in/gustavo-couto-carvalho-4098022b0/" },
         ],
     },
     {
