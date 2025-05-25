@@ -30,7 +30,7 @@ function Services() {
                         </span>
                         <h4 className="my-3">Bebidas</h4>
                         <p className="text-muted">
-                            Bebidas sempre geladas, com uma variedade para todos os gostos — para quem aprecia sua pizza com vinhos, refrigerantes ou um bo suco. O acompanhamento ideal para tornar sua refeição ainda mais saborosa.
+                            Bebidas sempre geladas, com uma variedade para todos os gostos — para quem aprecia sua pizza com vinhos, refrigerantes ou um bom suco. O acompanhamento ideal para tornar sua refeição ainda mais saborosa.
                         </p>
                     </div>
                     <div className="col-md-4">
@@ -40,7 +40,7 @@ function Services() {
                         </span>
                         <h4 className="my-3">Delivery</h4>
                         <p className="text-muted">
-                            Temos um serviço próprio de entregas para que você possa receber sua pizza e sua bebida na temperatura perfeita .
+                            Temos um serviço próprio de entregas para que você possa receber sua pizza e sua bebida na temperatura perfeita.
                         </p>
                     </div>
                 </div>
