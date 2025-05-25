@@ -11284,3 +11284,31 @@ header.masthead .masthead-heading {
   font-size: 0.9rem;
   font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
+
+.edit-btn {
+  background-color: #218838 !important;
+  color: #fff;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 4px;
+  margin: 0 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.edit-btn:hover {
+  background-color: #1b662b !important;
+}
+
+.delete-btn {
+  background-color: #E04725 !important;
+  color: #fff;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 4px;
+  margin: 0 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.delete-btn:hover {
+  background-color: #bf3c22 !important;
+}

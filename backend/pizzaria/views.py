@@ -129,10 +129,7 @@ class PizzaListCreate(generics.ListCreateAPIView):
 class BebidaListCreate(generics.ListCreateAPIView):
     queryset = Bebida.objects.all()
     serializer_class = BebidaSerializer
-    def get_permissions(self):
-        if self.request.method == 'POST':
-            return [IsAuthenticated(), IsFuncionario()]
-        return []
+    permission_classes = [IsAuthenticated, IsFuncionario]
 
 class TaxaEntregaListCreate(generics.ListCreateAPIView):
     queryset = TaxaEntrega.objects.all()
@@ -388,8 +385,25 @@ def calcular_rota(request):
         print(f"Erro ao processar resposta da API de rotas (OpenRouteService): {rota_dados if 'rota_dados' in locals() else 'Resposta não disponível'}, Erro: {e}")
         return JsonResponse({'erro': 'Erro ao processar a resposta da API de rotas.'}, status=500)
 
+
+# Criação de classes para edição e exclusão de objetos (CRUD)
+# para pizza, bebida, funcionario e motoboy 
 class PizzaRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Pizza.objects.all()
     serializer_class = PizzaSerializer
     permission_classes = [IsAuthenticated, IsFuncionario]
 
+class BebidaRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Bebida.objects.all()
+    serializer_class = BebidaSerializer
+    permission_classes = [IsAuthenticated, IsFuncionario]
+
+class FuncionarioRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Funcionario.objects.all()
+    serializer_class = FuncionarioSerializer
+    permission_classes = [IsAuthenticated, IsFuncionario]
+
+class MotoboyRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Motoboy.objects.all()
+    serializer_class = MotoboySerializer
+    permission_classes = [IsAuthenticated, IsFuncionario]
