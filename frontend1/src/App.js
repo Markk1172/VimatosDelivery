@@ -16,10 +16,12 @@ import FilaPedidos from './components/FilaPedidos';
 import EntregaRetirada from './components/EntregaRetirada';
 import Cadastros from './components/Cadastros';
 import ClienteEdit from './components/ClienteEdit';
-// import CarrinhoDeCompras from './components/CarrinhoDeCompras'; 
-// import Cardapio from './components/Cardapio';            
-import FuncionarioRoute from './components/FuncionarioRoute'; // Rota protegida de V2
+import CarrinhoDeCompras from './components/CarrinhoDeCompras'; 
+import Cardapio from './components/Cardapio';            
+import FuncionarioRoute from './components/FuncionarioRoute'; 
+import MeusPedidos from './components/MeusPedidos';
 
+// Componente Home 
 function Home() {
   return (
     <>
@@ -55,8 +57,9 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<Home />} />
         <Route path="/profile/edit" element={<ClienteEdit />} />
-        {/* <Route path="/carrinho" element={<CarrinhoDeCompras />} />  */}
-        {/* <Route path="/cardapio" element={<Cardapio />} />         */}
+        <Route path="/carrinho" element={<CarrinhoDeCompras />} /> 
+        <Route path="/cardapio" element={<Cardapio />} /> 
+        <Route path="/pedidos" element={<MeusPedidos />} />       
 
         {/* Rotas Protegidas para Funcionários (Estrutura da V2) */}
         <Route element={<FuncionarioRoute />}>

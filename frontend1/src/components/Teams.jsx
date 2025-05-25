@@ -1,77 +1,74 @@
 import React from "react";
-import img1 from '../assets/img/team/img1Team.jpg';
-import img2 from '../assets/img/team/img2Team.jpg';
-import img3 from '../assets/img/team/img3Team.jpg';
+import img1 from '../assets/img/team/victoria.jpg';
+import img2 from '../assets/img/team/gabriel.jpg';
+import img3 from '../assets/img/team/guxta.jpg';
+import img4 from '../assets/img/team/raul.jpg';
+import img5 from '../assets/img/team/marcos.jpg';
+import img6 from '../assets/img/team/amanda.jpg';
+import img7 from '../assets/img/team/matheus.jpg';
 
 const teamMembers = [
     {
-        name: "Parveen Anand",
-        role: "Lead Designer",
+        name: "Victoria Alves",
+        role: "Analista de Documentação",
         img: img1,
         socials: [
-            { icon: "fab fa-twitter", label: "Twitter Profile", href: "#!" },
-            { icon: "fab fa-facebook-f", label: "Facebook Profile", href: "#!" },
+            { icon: "fab fa-github", label: "GitHub Profile", href: "#!" },
             { icon: "fab fa-linkedin-in", label: "LinkedIn Profile", href: "#!" },
         ],
     },
     {
-        name: "Diana Petersen",
-        role: "Lead Marketer",
+        name: "Gabriel Oliveira",
+        role: "Desenvolvedor Front-End",
         img: img2,
         socials: [
-            { icon: "fab fa-twitter", label: "Twitter Profile", href: "#!" },
-            { icon: "fab fa-facebook-f", label: "Facebook Profile", href: "#!" },
+            { icon: "fab fa-github", label: "GitHub Profile", href: "#!" },
             { icon: "fab fa-linkedin-in", label: "LinkedIn Profile", href: "#!" },
         ],
     },
     {
-        name: "Larry Parker",
-        role: "Lead Developer",
+        name: "Gustavo Couto",
+        role: "Administrador de Banco de Dados",
         img: img3,
         socials: [
-            { icon: "fab fa-twitter", label: "Twitter Profile", href: "#!" },
-            { icon: "fab fa-facebook-f", label: "Facebook Profile", href: "#!" },
+            { icon: "fab fa-github", label: "GitHub Profile", href: "#!" },
             { icon: "fab fa-linkedin-in", label: "LinkedIn Profile", href: "#!" },
         ],
     },
     {
-        name: "Larry Parker",
-        role: "Lead Developer",
-        img: img3,
+        name: "Raul Alcântara",
+        role: "Analista de Documentação",
+        img: img4,
         socials: [
-            { icon: "fab fa-twitter", label: "Twitter Profile", href: "#!" },
-            { icon: "fab fa-facebook-f", label: "Facebook Profile", href: "#!" },
-            { icon: "fab fa-linkedin-in", label: "LinkedIn Profile", href: "#!" },
+            { icon: "fab fa-github", label: "GitHub Profile", href: "https://github.com/rAuuL777" },
+            { icon: "fab fa-linkedin-in", label: "LinkedIn Profile", href: "https://br.linkedin.com/in/raul-alc%C3%A2ntara-a3b7132ab" },
         ],
     },
     {
-        name: "Larry Parker",
-        role: "Lead Developer",
-        img: img3,
+        name: "Marcos Vinicius", 
+        role: "Desenvolvedor Back-End",
+        img: img5,
         socials: [
-            { icon: "fab fa-twitter", label: "Twitter Profile", href: "#!" },
-            { icon: "fab fa-facebook-f", label: "Facebook Profile", href: "#!" },
-            { icon: "fab fa-linkedin-in", label: "LinkedIn Profile", href: "#!" },
+            { icon: "fab fa-github", label: "GitHub Profile", href: "https://github.com/Markk1172" },
+            { icon: "fab fa-linkedin-in", label: "LinkedIn Profile", href: "https://www.linkedin.com/in/marcos-vinicius-599a96313/" },
         ],
     },
     {
-        name: "Larry Parker",
-        role: "Lead Developer",
-        img: img3,
+        name: "Ämanda Guimarães",
+        role: "Desenvolvedor Front-End",
+        img: img6,
         socials: [
-            { icon: "fab fa-twitter", label: "Twitter Profile", href: "#!" },
-            { icon: "fab fa-facebook-f", label: "Facebook Profile", href: "#!" },
-            { icon: "fab fa-linkedin-in", label: "LinkedIn Profile", href: "#!" },
+            { icon: "fab fa-github", label: "GitHub Profile", href: "https://github.com/amandagmrsz" },
+            { icon: "fab fa-linkedin-in", label: "LinkedIn Profile", href: "https://www.linkedin.com/in/amanda-beatriz-guimar%C3%A3es-alves/" },
         ],
     },
     {
-        name: "Larry Parker",
-        role: "Lead Developer",
-        img: img3,
+        name: "Matheus Araujo",
+        role: "Desenvolvedor Full Stack",
+        img: img7,
         socials: [
-            { icon: "fab fa-twitter", label: "Twitter Profile", href: "#!" },
-            { icon: "fab fa-facebook-f", label: "Facebook Profile", href: "#!" },
-            { icon: "fab fa-linkedin-in", label: "LinkedIn Profile", href: "#!" },
+            { icon: "fab fa-github", label: "GitHub Profile", href: "https://github.com/matheus0araujo" },
+            { icon: "fab fa-linkedin-in", label: "LinkedIn Profile", href: "https://www.linkedin.com/in/matheusaraujotch/" },
         ],
     },
 ];
@@ -82,9 +79,9 @@ const Teams = () => (
     <section className="page-section bg-light" id="team">
         <div className="container">
             <div className="text-center">
-                <h2 className="section-heading text-uppercase">Our Amazing Team</h2>
+                <h2 className="section-heading text-uppercase">Quem Somos</h2>
                 <h3 className="section-subheading text-muted">
-                    Lorem ipsum dolor sit amet consectetur.
+                    Trabalhamos juntos para transformar ideias em realidade e entregar resultados excepcionais.
                 </h3>
             </div>
             <div className="row flex-wrap justify-content-center">
@@ -115,9 +112,9 @@ const Teams = () => (
             <div className="row">
                 <div className="col-lg-8 mx-auto text-center">
                     <p className="large text-muted">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut eaque,
-                        laboriosam veritatis, quos non quis ad perspiciatis, totam corporis
-                        ea, alias ut unde.
+                        Nossa equipe é o coração do que fazemos. 
+                        Valorizamos a colaboração, a criatividade e a busca constante por conhecimento, 
+                        construindo um ambiente onde cada um pode crescer e inovar.
                     </p>
                 </div>
             </div>
