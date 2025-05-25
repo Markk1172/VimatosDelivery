@@ -23,12 +23,15 @@ urlpatterns = [
 
     # URLs para views baseadas em classes genéricas
     path('funcionarios/', FuncionarioListCreate.as_view(), name='funcionario-list-create'),
+    path('funcionarios/<int:pk>/', views.FuncionarioRetrieveUpdateDestroy.as_view(), name='funcionario-detail-update-destroy'),
     path('clientes/', ClienteListCreate.as_view(), name='cliente-list-create'),
     path('clientes/<int:pk>/', ClienteRetrieveUpdateDestroy.as_view(), name='cliente-detail-update-destroy'),
     path('motoboys/', MotoboyListCreate.as_view(), name='motoboy-list-create'),
+    path('motoboys/<int:pk>/', views.MotoboyRetrieveUpdateDestroy.as_view(), name='motoboy-detail-update-destroy'),
     path('pizzas/', PizzaListCreate.as_view(), name='pizza-list-create'),
     path('pizzas/<int:pk>/', views.PizzaRetrieveUpdateDestroy.as_view(), name='pizza-detail-update-destroy'),
     path('bebidas/', BebidaListCreate.as_view(), name='bebida-list-create'),
+    path('bebidas/<int:pk>/', views.BebidaRetrieveUpdateDestroy.as_view(), name='bebida-detail-update-destroy'),
     path('taxas-entrega/', TaxaEntregaListCreate.as_view(), name='taxa-entrega-list-create'),
     
     # URLs para views baseadas em APIView ou funções decoradas

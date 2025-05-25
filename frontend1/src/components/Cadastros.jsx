@@ -237,17 +237,21 @@ const Cadastros = () => {
     }, [getApiEndpoint, showMessage, navigate]);
 
     useEffect(() => {
-        setFormDataState({}); 
-        setEditingItemId(null); 
-        setItemsList([]); 
+        setItemsList([]);
         if (categoria && currentMode === 'manage') {
-            fetchItems(categoria); 
+            fetchItems(categoria);
         }
-    }, [categoria, currentMode, fetchItems]);
+
+        if (currentMode !== 'create') {
+            setFormDataState({});
+            setEditingItemId(null); // Só limpa se for fora de edição
+        }
+        }, [categoria, currentMode, fetchItems]);
+
 
     const handleModeChange = (mode) => {
-        if (categoria !== 'pizza' && mode === 'manage') { 
-            showMessage('O modo de Gerenciamento (edição/exclusão) está disponível apenas para Pizzas no momento. Selecione "Pizza" para gerenciar.', 'info'); 
+        if (!['pizza', 'bebida', 'funcionario', 'motoboy'].includes(categoria) && currentMode === 'manage') {
+            showMessage('O modo de Gerenciamento (edição/exclusão) está disponível apenas para Pizzas, Bebidas, Funcionários e Motoboys.', 'info'); 
             return; 
         }
         setCurrentMode(mode);
@@ -261,18 +265,47 @@ const Cadastros = () => {
 
     const handleEdit = (item) => {
         setEditingItemId(item.id);
-        setFormDataState({
-            ...item,
-            sabor: item.sabor, 
-            preco_original: item.preco_original, 
-            data_desconto: item.data_desconto ? item.data_desconto.slice(0, 16) : '',
-        });
-        setCurrentMode('create'); // mantém o modo edição
+
+        if (categoria === 'pizza') {
+            setFormDataState({
+                ...item,
+                sabor: item.sabor,
+                preco_original: item.preco_original,
+                data_desconto: item.data_desconto ? item.data_desconto.slice(0, 16) : '',
+            });
+        } else if (categoria === 'bebida') {
+            setFormDataState({
+                ...item,
+                sabor: item.sabor,
+                preco: item.preco,
+            });
+        } else if (categoria === 'funcionario') {
+            setFormDataState({
+                ...item,
+                nome: item.nome,
+                email: item.email,
+                telefone: item.telefone,
+                cargo: item.cargo,
+            });
+        } else if (categoria === 'motoboy') {
+            setFormDataState({
+                ...item,
+                nome: item.nome,
+                email: item.email,
+                telefone: item.telefone,
+                data_nasc: item.data_nasc ? item.data_nasc.slice(0, 10) : '',
+                placa_moto: item.placa_moto,
+            });
+        } else {
+            setFormDataState({ ...item });
+        }
+
+        setCurrentMode('create');
     };
 
     const handleDelete = async (id) => {
-        if (categoria !== 'pizza') { 
-            showMessage('A exclusão está disponível apenas para Pizzas no momento.', 'info');
+        if (!['pizza', 'bebida', 'funcionario', 'motoboy'].includes(categoria) && currentMode === 'manage') {
+            showMessage('O modo de Gerenciamento (edição/exclusão) está disponível apenas para Pizzas, Bebidas, Funcionários e Motoboys.', 'info');
             return;
         }
         if (!window.confirm('Tem certeza que deseja excluir este item?')) {
@@ -326,6 +359,10 @@ const Cadastros = () => {
     if (!accessToken) {
         showMessage('Acesso não autorizado. Faça login novamente.', 'error');
         navigate('/login');
+        console.log('EDITANDO?', isUpdate);
+        console.log('ID:', editingItemId);
+        console.log('METHOD:', method);
+        console.log('ENDPOINT:', endpoint);
         return;
     }
 
@@ -542,8 +579,6 @@ const Cadastros = () => {
                         <input type="number" name="preco_original" value={formData.preco_original || ''} placeholder="Ex: 39.90" step="0.01" onChange={handleInputChange} style={inputStyle} required />
                         <label>Preço Promocional (Opcional, R$)</label>
                         <input type="number" name="preco_promocional" value={formData.preco_promocional || ''} placeholder="Ex: 35.00" step="0.01" onChange={handleInputChange} style={inputStyle} />
-                        <label>Data de Desconto (Opcional)</label>
-                        <input type="datetime-local" name="data_desconto" value={formData.data_desconto ? formData.data_desconto.slice(0, 16) : ''} onChange={handleInputChange} style={inputStyle} />
                     </>
                 );
             case 'bebida':
@@ -717,23 +752,23 @@ const Cadastros = () => {
                                 <td style={tdStyle}>{getDisplayValue(item, categoria)}</td>
                                 <td style={tdStyle}>
                                     {['pizza', 'bebida', 'funcionario', 'motoboy'].includes(categoria) && (
-    <>
-      <button
-        onClick={() => handleEdit(item)}
-        style={editBtnStyle}
-      >
-        Editar
-      </button>
-      {categoria === 'pizza' && (
-        <button
-          onClick={() => handleDelete(item.id)}
-          style={deleteBtnStyle}
-        >
-          Excluir
-        </button>
-      )}
-    </>
-  )}
+                                        <>
+                                        <button className='edit-btn'
+                                            onClick={() => handleEdit(item)}
+                                            style={editBtnStyle}
+                                        >
+                                            Editar
+                                        </button>
+                                        {['pizza', 'bebida', 'funcionario', 'motoboy'].includes(categoria) && (
+                                            <button className='delete-btn'
+                                            onClick={() => handleDelete(item.id)}
+                                            style={deleteBtnStyle}
+                                            >
+                                            Excluir
+                                            </button>
+                                        )}
+                                        </>
+                                    )}
                                 </td>
                             </tr>
                         ))}
