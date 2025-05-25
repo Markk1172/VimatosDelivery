@@ -120,7 +120,7 @@ const Navbar = () => {
                             onClick={handleLogout}
                             style={{
                                 padding: '6px 12px',
-                                backgroundColor: '#dc3545',
+                                backgroundColor: '#E04725',
                                 color: '#fff',
                                 border: 'none',
                                 borderRadius: '4px',
@@ -250,7 +250,7 @@ const Cadastros = () => {
 
 
     const handleModeChange = (mode) => {
-        if (!['pizza', 'bebida', 'funcionario', 'motoboy'].includes(categoria) && currentMode === 'manage') {
+        if (!['pizza', 'bebida', 'funcionario', 'motoboy', 'cupom'].includes(categoria) && currentMode === 'manage') {
             showMessage('O modo de Gerenciamento (edição/exclusão) está disponível apenas para Pizzas, Bebidas, Funcionários e Motoboys.', 'info'); 
             return; 
         }
@@ -296,7 +296,15 @@ const Cadastros = () => {
                 data_nasc: item.data_nasc ? item.data_nasc.slice(0, 10) : '',
                 placa_moto: item.placa_moto,
             });
-        } else {
+        } else if (categoria === 'cupom') {
+            setFormDataState({
+                ...item,
+                codigo: item.codigo,
+                percentual_desconto: item.percentual_desconto,
+                data_validade: item.data_validade ? item.data_validade.slice(0, 10) : '',
+                ativo: item.ativo ? 'true' : 'false',
+            }); 
+        }else {
             setFormDataState({ ...item });
         }
 
@@ -304,7 +312,7 @@ const Cadastros = () => {
     };
 
     const handleDelete = async (id) => {
-        if (!['pizza', 'bebida', 'funcionario', 'motoboy'].includes(categoria) && currentMode === 'manage') {
+        if (!['pizza', 'bebida', 'funcionario', 'motoboy', 'cupom'].includes(categoria) && currentMode === 'manage') {
             showMessage('O modo de Gerenciamento (edição/exclusão) está disponível apenas para Pizzas, Bebidas, Funcionários e Motoboys.', 'info');
             return;
         }
@@ -751,7 +759,7 @@ const Cadastros = () => {
                             <tr key={item.id}>
                                 <td style={tdStyle}>{getDisplayValue(item, categoria)}</td>
                                 <td style={tdStyle}>
-                                    {['pizza', 'bebida', 'funcionario', 'motoboy'].includes(categoria) && (
+                                    {['pizza', 'bebida', 'funcionario', 'motoboy', 'cupom'].includes(categoria) && (
                                         <>
                                         <button className='edit-btn'
                                             onClick={() => handleEdit(item)}
@@ -759,7 +767,7 @@ const Cadastros = () => {
                                         >
                                             Editar
                                         </button>
-                                        {['pizza', 'bebida', 'funcionario', 'motoboy'].includes(categoria) && (
+                                        {['pizza', 'bebida', 'funcionario', 'motoboy', 'cupom'].includes(categoria) && (
                                             <button className='delete-btn'
                                             onClick={() => handleDelete(item.id)}
                                             style={deleteBtnStyle}
@@ -818,7 +826,7 @@ const Cadastros = () => {
                         >
                             Cadastrar Novo
                         </button>
-                        {['pizza', 'bebida', 'funcionario', 'motoboy'].includes(categoria) && (
+                        {['pizza', 'bebida', 'funcionario', 'motoboy', 'cupom'].includes(categoria) && (
                           <button
                             onClick={() => handleModeChange('manage')}
                             style={{ ...btnStyle, backgroundColor: currentMode === 'manage' ? '#007bff' : '#6c757d', width: 'auto' }}
