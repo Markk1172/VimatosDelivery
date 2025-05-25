@@ -284,6 +284,11 @@ class CupomViewSet(viewsets.ModelViewSet):
     serializer_class = CupomSerializer
     permission_classes = [IsAuthenticated, IsFuncionario]
 
+class CupomListCreate(generics.ListCreateAPIView):
+    queryset = Cupom.objects.all()
+    serializer_class = CupomSerializer
+    permission_classes = [IsAuthenticated, IsFuncionario]
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def buscar_cep_api(request):
@@ -406,4 +411,9 @@ class FuncionarioRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 class MotoboyRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Motoboy.objects.all()
     serializer_class = MotoboySerializer
+    permission_classes = [IsAuthenticated, IsFuncionario]
+
+class CupomRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Cupom.objects.all()
+    serializer_class = CupomSerializer
     permission_classes = [IsAuthenticated, IsFuncionario]

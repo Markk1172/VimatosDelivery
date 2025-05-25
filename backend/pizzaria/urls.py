@@ -33,6 +33,8 @@ urlpatterns = [
     path('bebidas/', BebidaListCreate.as_view(), name='bebida-list-create'),
     path('bebidas/<int:pk>/', views.BebidaRetrieveUpdateDestroy.as_view(), name='bebida-detail-update-destroy'),
     path('taxas-entrega/', TaxaEntregaListCreate.as_view(), name='taxa-entrega-list-create'),
+    path('cupons/', views.CupomListCreate.as_view(), name='cupom-list-create'),
+    path('cupons/<int:pk>/', views.CupomRetrieveUpdateDestroy.as_view(), name='cupom-detail-update-destroy'),
     
     # URLs para views baseadas em APIView ou funções decoradas
     path('pizzas/<int:pk>/aplicar-desconto/', AplicarDescontoPizzaView.as_view(), name='aplicar-desconto-pizza'),
