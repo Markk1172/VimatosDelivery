@@ -116,7 +116,6 @@ function Navbar() {
             <li className="nav-item"><Link className="nav-link" to="/cardapio">Cardápio</Link></li>
             <li className="nav-item"><a className="nav-link" href="#about">Trajetória</a></li>
             <li className="nav-item"><a className="nav-link" href="#team">Time</a></li>
-            <li className="nav-item"><a className="nav-link" href="#footer">Contatos</a></li>
             <li className="nav-item">
               {loggedInUser ? (
                 <div className="nav-item d-flex align-items-center" style={{ gap: '6px' }}>

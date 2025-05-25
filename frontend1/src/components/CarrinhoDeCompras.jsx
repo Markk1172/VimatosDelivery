@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import logo from '../assets/img/logo.png'; 
+import { Link, useNavigate, useLocation } from 'react-router-dom'; // Import useLocation for Navbar
+import logo from '../assets/img/logo.png';
+
+import iconPix from '../assets/img/pix.png'; // Make sure the path is correct
+import iconDinheiro from '../assets/img/dollar.png'; 
 
 // --- SVGs de Ícones (copiados do Cardapio.jsx) ---
 const shoppingCartIcon = (
@@ -13,11 +16,11 @@ const shoppingCartIcon = (
       xmlns="http://www.w3.org/2000/svg"
     >
       <g transform="translate(6.8,6.8)">
-        <circle cx="5" cy="17" r="1.5" fill="rgb(52, 58, 64)"/> 
-        <circle cx="14" cy="17" r="1.5" fill="rgb(52, 58, 64)"/> 
+        <circle cx="5" cy="17" r="1.5" fill="rgb(52, 58, 64)"/>
+        <circle cx="14" cy="17" r="1.5" fill="rgb(52, 58, 64)"/>
         <path
           d="M-1 0H1L2.68 12.39C2.84 13.66 3.91 14.67 5.19 14.67H14.5C15.78 14.67 16.85 13.66 17.01 12.39L17.82 5.39C17.93 4.47 17.21 3.67 16.28 3.67H3.12"
-          stroke="rgb(52, 58, 64)" 
+          stroke="rgb(52, 58, 64)"
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -36,8 +39,8 @@ const userIcon = (
       xmlns="http://www.w3.org/2000/svg"
     >
       <g>
-        <circle cx="16" cy="13" r="5" fill="rgb(52, 58, 64)" /> 
-        <path d="M8 25c0-4 4-7 8-7s8 3 8 7" fill="rgb(52, 58, 64)" /> 
+        <circle cx="16" cy="13" r="5" fill="rgb(52, 58, 64)" />
+        <path d="M8 25c0-4 4-7 8-7s8 3 8 7" fill="rgb(52, 58, 64)" />
       </g>
     </svg>
 );
@@ -45,7 +48,13 @@ const userIcon = (
 // Definindo a Navbar como um componente interno neste arquivo
 const InternalNavbar = () => {
     const navigate = useNavigate();
+    const location = useLocation(); // Hook to get current path
     const [loggedInUser, setLoggedInUser] = useState(null);
+
+    // State for hover effects
+    const [homeHover, setHomeHover] = useState(false);
+    const [cardapioHover, setCardapioHover] = useState(false); // Make sure this is 'cardapioHover' not 'cadastrosHover'
+
 
     useEffect(() => {
         const checkLoginStatus = () => {
@@ -74,16 +83,16 @@ const InternalNavbar = () => {
 
     // --- Estilos da Navbar (copiados do Cardapio.jsx) ---
     const navbarStyle = {
-        backgroundColor: 'rgb(248, 249, 250)', 
+        backgroundColor: 'rgb(248, 249, 250)',
         borderBottom: '1px solid #dee2e6',
-        padding: '1rem 2rem', 
+        padding: '1rem 2rem',
         position: 'sticky',
         top: 0,
         zIndex: 999,
         display: 'flex',
         alignItems: 'center',
         fontFamily: 'Arial, sans-serif',
-        justifyContent: 'space-between', 
+        justifyContent: 'space-between',
     };
 
     const brandStyle = {
@@ -92,19 +101,19 @@ const InternalNavbar = () => {
         display: 'flex',
         alignItems: 'center',
         gap: '10px',
-        color: 'rgb(52, 58, 64)', 
+        color: 'rgb(52, 58, 64)',
     };
 
     // Estilos dos links de navegação simplificados
     const navLinksContainerStyle = {
         display: 'flex',
-        gap: '4rem', 
-        flexGrow: 1, 
-        justifyContent: 'center', 
+        gap: '4rem',
+        flexGrow: 1,
+        justifyContent: 'center',
     };
 
-    const getNavLinkStyle = (path) => ({
-        color: navigate.pathname === path ? '#cf301d' : 'rgb(52, 58, 64)', 
+    const getNavLinkStyle = (path, isHovered) => ({ // Updated to accept isHovered
+        color: isHovered || location.pathname === path ? '#cf301d' : 'rgb(52, 58, 64)',
         textDecoration: 'none',
         fontWeight: 600,
         transition: 'color 0.2s ease-in-out',
@@ -115,7 +124,7 @@ const InternalNavbar = () => {
     const authIconsContainerStyle = {
         display: 'flex',
         alignItems: 'center',
-        gap: '15px', 
+        gap: '15px',
     };
 
     return (
@@ -130,13 +139,17 @@ const InternalNavbar = () => {
             <div style={navLinksContainerStyle}>
                 <Link
                     to="/"
-                    style={getNavLinkStyle('/')}
+                    style={getNavLinkStyle('/', homeHover)} // Pass homeHover
+                    onMouseEnter={() => setHomeHover(true)}
+                    onMouseLeave={() => setHomeHover(false)}
                 >
                     HOME
                 </Link>
                 <Link
                     to="/cardapio"
-                    style={getNavLinkStyle('/cadastros')}
+                    style={getNavLinkStyle('/cardapio', cardapioHover)} // Pass cardapioHover
+                    onMouseEnter={() => setCardapioHover(true)}
+                    onMouseLeave={() => setCardapioHover(false)}
                 >
                     CARDÁPIO
                 </Link>
@@ -161,7 +174,7 @@ const InternalNavbar = () => {
                                     fontWeight: "normal",
                                     boxShadow: "none",
                                     textTransform: "none",
-                                    padding: '0' 
+                                    padding: '0'
                                 }}
                             >
                                 {/* O span aqui é para agrupar o ícone e aplicar estilos se necessário */}
@@ -225,23 +238,59 @@ export default function CarrinhoDeCompras() {
         }
     ]);
 
-    // Novo estado para o CEP e a taxa de entrega
-    const [cep, setCep] = useState('');
-    const [deliveryFee, setDeliveryFee] = useState(0.00); // Taxa de entrega inicial, pode ser 0 ou um valor padrão
+    // Estado para a taxa de entrega
+    const [deliveryFee, setDeliveryFee] = useState(0.00);
+    // Estado para o cupom e o valor do desconto
+    const [couponCode, setCouponCode] = useState('');
+    const [discount, setDiscount] = useState(0.00);
+    const [couponMessage, setCouponMessage] = useState('');
+
+    // --- Novas Variáveis de Estado para Endereço ---
+    const [addresses, setAddresses] = useState([
+        // Exemplo de endereços pré-cadastrados (você buscaria isso de uma API)
+        { id: 1, cep: '01001-000', street: 'Praça da Sé', number: '100', neighborhood: 'Centro', city: 'São Paulo', state: 'SP', complement: '' },
+        { id: 2, cep: '04547-000', street: 'Rua do Consolação', number: '1500', neighborhood: 'Consolação', city: 'São Paulo', state: 'SP', complement: 'Apto 23' },
+    ]);
+    const [selectedAddressId, setSelectedAddressId] = useState(''); // ID do endereço selecionado no dropdown
+    const [newAddress, setNewAddress] = useState({ // Estado para o novo endereço a ser cadastrado
+        cep: '',
+        street: '',
+        number: '',
+        complement: '',
+        neighborhood: '',
+        city: '',
+        state: ''
+    });
+    const [showNewAddressForm, setShowNewAddressForm] = useState(false); // Para mostrar/esconder o formulário de novo endereço
+
+    // --- Novo estado para o método de pagamento ---
+    const [paymentMethod, setPaymentMethod] = useState(''); // Stores the selected payment method
+
+    useEffect(() => {
+        if (selectedAddressId) {
+            const address = addresses.find(addr => addr.id === parseInt(selectedAddressId));
+            if (address) {
+                fetchDeliveryFee(address.cep);
+            }
+        } else if (!showNewAddressForm) {
+            setDeliveryFee(0.00);
+        }
+    }, [selectedAddressId, addresses, showNewAddressForm]);
+
 
     const calculateSubtotal = () => {
         return cartItems.reduce((acc, item) => acc + (item.quantity * item.price), 0);
     };
 
     const subtotal = calculateSubtotal();
-    const total = subtotal + deliveryFee;
+    const totalAfterDiscount = subtotal - discount;
+    const total = totalAfterDiscount + deliveryFee;
 
     const handleQuantityChange = (id, delta) => {
         setCartItems(prevItems => {
             const updatedItems = prevItems.map(item =>
                 item.id === id ? { ...item, quantity: Math.max(1, item.quantity + delta) } : item
             );
-            // Filtra itens com quantidade > 0, ou remove se a quantidade chegar a 0
             return updatedItems.filter(item => item.quantity > 0);
         });
     };
@@ -250,15 +299,9 @@ export default function CarrinhoDeCompras() {
         setCartItems(prevItems => prevItems.filter(item => item.id !== id));
     };
 
-    // Função para simular a busca da taxa de entrega
     const fetchDeliveryFee = (inputCep) => {
-        // Remove caracteres não numéricos do CEP
         const cleanCep = inputCep.replace(/\D/g, '');
-
-        // Exemplo de lógica de simulação:
-        // Você substituirá isso por uma chamada real à API (backend)
         if (cleanCep.length === 8) {
-            // Simula diferentes taxas baseadas em alguns CEPs
             if (cleanCep.startsWith('01') || cleanCep.startsWith('02')) {
                 setDeliveryFee(10.00);
             } else if (cleanCep.startsWith('03') || cleanCep.startsWith('04')) {
@@ -266,23 +309,93 @@ export default function CarrinhoDeCompras() {
             } else if (cleanCep.startsWith('05')) {
                 setDeliveryFee(5.00);
             } else {
-                setDeliveryFee(12.00); // Valor padrão para outros CEPs
+                setDeliveryFee(12.00);
             }
         } else {
-            setDeliveryFee(0.00); // Zera a taxa se o CEP for inválido ou incompleto
+            setDeliveryFee(0.00);
         }
     };
 
-    const handleCepChange = (e) => {
-        const newCep = e.target.value;
-        setCep(newCep);
-        // Você pode chamar a função de busca da taxa de entrega aqui,
-        // mas talvez seja melhor ter um botão para "Calcular Frete"
-        // para evitar muitas chamadas à API enquanto o usuário digita.
-        // Por enquanto, vamos chamar em cada mudança para demonstração.
-        fetchDeliveryFee(newCep);
+    const applyCoupon = () => {
+        if (couponCode.toUpperCase() === 'DESCONTO10') {
+            setDiscount(subtotal * 0.10);
+            setCouponMessage('Cupom aplicado com sucesso! Você ganhou 10% de desconto.');
+        } else if (couponCode.toUpperCase() === 'FRETEGRATIS') {
+            setDeliveryFee(0.00);
+            setDiscount(0.00);
+            setCouponMessage('Cupom aplicado com sucesso! Frete grátis.');
+        } else if (couponCode.toUpperCase() === 'FIAP50') {
+            setDiscount(50.00);
+            setCouponMessage('Cupom aplicado com sucesso! R$50 de desconto.');
+        }
+        else {
+            setDiscount(0.00);
+            setCouponMessage('Cupom inválido. Tente novamente.');
+        }
     };
 
+    // --- Funções para Endereço ---
+    const handleAddressSelectChange = (e) => {
+        const id = e.target.value;
+        setSelectedAddressId(id);
+        setShowNewAddressForm(false);
+        if (id === "new") {
+            setShowNewAddressForm(true);
+            setNewAddress({ cep: '', street: '', number: '', complement: '', neighborhood: '', city: '', state: '' });
+            setDeliveryFee(0.00);
+        }
+    };
+
+    const handleNewAddressChange = (e) => {
+        const { name, value } = e.target;
+        setNewAddress(prev => ({ ...prev, [name]: value }));
+
+        if (name === 'cep') {
+            const cleanCep = value.replace(/\D/g, '');
+            if (cleanCep.length === 8) {
+                fetchDeliveryFee(cleanCep);
+                if (cleanCep === '01001000') {
+                    setNewAddress(prev => ({
+                        ...prev,
+                        street: 'Praça da Sé',
+                        neighborhood: 'Sé',
+                        city: 'São Paulo',
+                        state: 'SP'
+                    }));
+                } else if (cleanCep === '04547000') {
+                    setNewAddress(prev => ({
+                        ...prev,
+                        street: 'Rua do Consolação',
+                        neighborhood: 'Consolação',
+                        city: 'São Paulo',
+                        state: 'SP'
+                    }));
+                } else {
+                    setNewAddress(prev => ({
+                        ...prev,
+                        street: '', neighborhood: '', city: '', state: ''
+                    }));
+                }
+            } else {
+                setDeliveryFee(0.00);
+            }
+        }
+    };
+
+    const handleSaveNewAddress = () => {
+        if (newAddress.cep && newAddress.street && newAddress.number && newAddress.neighborhood && newAddress.city && newAddress.state) {
+            const newId = addresses.length > 0 ? Math.max(...addresses.map(a => a.id)) + 1 : 1;
+            const addressToSave = { ...newAddress, id: newId };
+            setAddresses(prev => [...prev, addressToSave]);
+            setSelectedAddressId(newId.toString());
+            setShowNewAddressForm(false);
+            setCouponMessage('Novo endereço cadastrado e selecionado.');
+        } else {
+            setCouponMessage('Por favor, preencha todos os campos do endereço.');
+        }
+    };
+
+    // --- Estilos ---
     const pageContainerStyle = {
         minHeight: '100vh',
         margin: 0,
@@ -294,22 +407,22 @@ export default function CarrinhoDeCompras() {
     };
 
     const contentWrapperStyle = {
-        paddingTop: 'calc(1rem + 2rem + 1px + 100px)', // (padding Navbar + borda + margin-top desejada para o box do carrinho)
+        paddingTop: 'calc(1rem + 2rem + 1px + 100px)',
         flexGrow: 1,
-        marginBottom: '2rem', // Espaçamento inferior para o box do carrinho
+        marginBottom: '2rem',
     };
 
     const carrinhoBoxStyle = {
         width: '500px',
         margin: '0 auto',
         borderRadius: '8px',
-        boxShadow: '0 5px 20px rgba(0, 0, 0, 0.1)', // Sombra mais suave
+        boxShadow: '0 5px 20px rgba(0, 0, 0, 0.1)',
         backgroundColor: '#fff',
     };
 
     const headerStyle = {
         color: '#fff',
-        backgroundColor: '#cf301d', // Cor vermelha vibrante
+        backgroundColor: '#cf301d',
         borderTopLeftRadius: '8px',
         borderTopRightRadius: '8px',
     };
@@ -317,11 +430,11 @@ export default function CarrinhoDeCompras() {
     const headerH3Style = {
         margin: 0,
         padding: '20px',
-        textAlign: 'center', // Centralizar o título do carrinho
+        textAlign: 'center',
     };
 
     const itemsListContainerStyle = {
-        backgroundColor: '#f9f9f9', // Fundo claro para a lista de itens
+        backgroundColor: '#f9f9f9',
         paddingBottom: '15px',
     };
 
@@ -333,7 +446,7 @@ export default function CarrinhoDeCompras() {
         display: 'flex',
         flexDirection: 'row',
         padding: '15px 0',
-        borderBottom: '1px solid #eee', // Borda mais suave
+        borderBottom: '1px solid #eee',
         alignItems: 'center',
     };
 
@@ -364,17 +477,17 @@ export default function CarrinhoDeCompras() {
         flex: 1,
         textAlign: 'right',
         fontWeight: 'bold',
-        color: '#343a40', // Cor do preço
+        color: '#343a40',
     };
 
     const quantityButtonStyle = {
         color: '#000',
         fontSize: '1em',
         textAlign: 'center',
-        borderRadius: '50%', // Botões redondos
+        borderRadius: '50%',
         backgroundColor: '#fff',
-        border: '1px solid #ccc', // Borda suave
-        boxShadow: '0 2px 5px rgba(0,0,0,0.1)', // Sombra suave
+        border: '1px solid #ccc',
+        boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
         width: '28px',
         height: '28px',
         lineHeight: '26px',
@@ -395,7 +508,7 @@ export default function CarrinhoDeCompras() {
     const footerStyle = {
         padding: '20px',
         textAlign: 'center',
-        backgroundColor: '#e0e0e0', // Fundo um pouco mais escuro que a lista de itens
+        backgroundColor: '#e0e0e0',
         borderBottomLeftRadius: '8px',
         borderBottomRightRadius: '8px',
     };
@@ -434,26 +547,28 @@ export default function CarrinhoDeCompras() {
         transition: 'background-color 0.2s ease',
     };
 
-    const cepInputContainerStyle = {
+    const couponInputContainerStyle = {
         padding: '15px 20px',
         backgroundColor: '#f9f9f9',
         borderTop: '1px solid #eee',
         display: 'flex',
         alignItems: 'center',
         gap: '10px',
+        flexWrap: 'wrap',
     };
 
-    const cepInputStyle = {
+    const couponInputStyle = {
         flexGrow: 1,
         padding: '10px',
         borderRadius: '4px',
         border: '1px solid #ccc',
         fontSize: '1em',
+        minWidth: '150px',
     };
 
-    const calculateFeeButtonStyle = {
+    const applyCouponButtonStyle = {
         padding: '10px 15px',
-        backgroundColor: '#28a745', // Bootstrap success green
+        backgroundColor: '#cf301d',
         color: '#fff',
         border: 'none',
         borderRadius: '4px',
@@ -462,9 +577,115 @@ export default function CarrinhoDeCompras() {
         transition: 'background-color 0.2s ease',
     };
 
+    const couponMessageStyle = {
+        marginTop: '10px',
+        fontSize: '0.9em',
+        color: discount > 0 ? '#28a745' : '#dc3545',
+        textAlign: 'center',
+        padding: '0 20px',
+    };
+
+    // --- Estilos para o Endereço ---
+    const addressSectionStyle = {
+        padding: '15px 20px',
+        backgroundColor: '#f9f9f9',
+        borderTop: '1px solid #eee',
+        marginBottom: '15px',
+    };
+
+    const selectStyle = {
+        width: '100%',
+        padding: '10px',
+        borderRadius: '4px',
+        border: '1px solid #ccc',
+        fontSize: '1em',
+        marginBottom: '10px',
+        backgroundColor: '#fff',
+        textAlign: 'center',
+    };
+
+    const addressFormStyle = {
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gap: '10px',
+        marginTop: '15px',
+        padding: '10px',
+        border: '1px dashed #ccc',
+        borderRadius: '5px',
+        backgroundColor: '#f0f0f0',
+    };
+
+    const formGroupStyle = {
+        display: 'flex',
+        flexDirection: 'column',
+    };
+
+    const formInputStyle = {
+        padding: '8px',
+        borderRadius: '4px',
+        border: '1px solid #ccc',
+        fontSize: '0.9em',
+    };
+
+    const saveAddressButtonStyle = {
+        gridColumn: '1 / -1',
+        padding: '10px 15px',
+        backgroundColor: '#cf301d',
+        color: '#fff',
+        border: 'none',
+        borderRadius: '4px',
+        cursor: 'pointer',
+        fontWeight: 'bold',
+        transition: 'background-color 0.2s ease',
+        marginTop: '10px',
+    };
+
+    // --- Styles for Payment Method Section ---
+    const paymentMethodSectionStyle = {
+        padding: '15px 20px',
+        backgroundColor: '#f9f9f9',
+        borderTop: '1px solid #eee',
+        marginBottom: '15px',
+        textAlign: 'center', // Center the content
+    };
+
+    const paymentMethodGridStyle = {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', // Responsive grid for payment options
+        gap: '15px',
+        marginTop: '15px',
+        justifyContent: 'center', // Center grid items
+    };
+
+    const paymentOptionButtonStyle = (method) => ({
+        padding: '12px 10px',
+        border: `2px solid ${paymentMethod === method ? '#cf301d' : '#ccc'}`,
+        borderRadius: '8px',
+        backgroundColor: paymentMethod === method ? '#ffe0e0' : '#fff', // Light red for selected
+        cursor: 'pointer',
+        fontSize: '0.95em',
+        fontWeight: 'bold',
+        color: paymentMethod === method ? '#cf301d' : '#343a40',
+        transition: 'all 0.2s ease-in-out',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+    });
+
+    const paymentOptionHoverStyle = {
+        boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+        transform: 'translateY(-2px)',
+    };
+
+    // Simple icons for payment methods
+    const creditCardIcon = <span style={{ fontSize: '1.5em', marginBottom: '5px' }}>💳</span>;
+    const debitCardIcon = <span style={{ fontSize: '1.5em', marginBottom: '5px' }}> डेबिट</span>; // Placeholder using Devnagari 'debit' as icon
+    const moneyIcon = <span style={{ fontSize: '1.5em', marginBottom: '5px' }}>💰</span>;
+    const pixIcon = <span style={{ fontSize: '1.5em', marginBottom: '5px' }}>▧</span>; // Placeholder for Pix icon
+
     return (
         <div style={pageContainerStyle}>
-            {/* Renderizar a Navbar interna */}
             <InternalNavbar />
 
             <div style={contentWrapperStyle}>
@@ -504,7 +725,6 @@ export default function CarrinhoDeCompras() {
 
                                         <div style={itemNameDetailsStyle}>
                                             <h5 style={{ margin: '10px 0 0' }}>{item.name}</h5>
-                                            {/* Removido o item.code, pois não estava definido nos dados */}
                                             <p style={{ margin: '5px 0 0', fontSize: '0.9em', color: '#777' }}>Preço unitário: R${item.price.toFixed(2).replace('.', ',')}</p>
                                         </div>
 
@@ -531,24 +751,178 @@ export default function CarrinhoDeCompras() {
                         )}
                     </div>
 
-                    {/* Novo Bloco para o Input de CEP */}
-                    <div style={cepInputContainerStyle}>
-                        <label htmlFor="cepInput" style={{ fontWeight: 'bold', color: '#343a40' }}>CEP:</label>
+                    {/* Bloco para o Input de Cupom de Desconto */}
+                    <div style={couponInputContainerStyle}>
+                        <label htmlFor="couponInput" style={{ fontWeight: 'bold', color: '#343a40' }}>Cupom:</label>
                         <input
                             type="text"
-                            id="cepInput"
-                            value={cep}
-                            onChange={handleCepChange}
-                            placeholder="Digite seu CEP"
-                            style={cepInputStyle}
-                            maxLength="9" // Adicionado para incluir o hífen
+                            id="couponInput"
+                            value={couponCode}
+                            onChange={(e) => setCouponCode(e.target.value)}
+                            placeholder="Código do cupom"
+                            style={couponInputStyle}
                         />
                         <button
-                            onClick={() => fetchDeliveryFee(cep)}
-                            style={calculateFeeButtonStyle}
+                            onClick={applyCoupon}
+                            style={applyCouponButtonStyle}
                         >
-                            Calcular Frete
+                            Aplicar Cupom
                         </button>
+                    </div>
+                    {couponMessage && <p style={couponMessageStyle}>{couponMessage}</p>}
+
+                    {/* --- Novo Bloco para Endereço e Frete --- */}
+                    <div style={addressSectionStyle}>
+                        <h4 style={{ margin: '0 0 15px', color: '#343a40', textAlign: 'center' }}>Endereço de Entrega</h4>
+
+                        {/* Select de Endereços Antigos */}
+                        <label htmlFor="addressSelect" style={{ fontWeight: 'bold', color: '#343a40', display: 'block', marginBottom: '5px' }}>
+                            Selecione um endereço ou cadastre um novo:
+                        </label>
+                        <select
+                            id="addressSelect"
+                            value={selectedAddressId}
+                            onChange={handleAddressSelectChange}
+                            style={selectStyle}
+                        >
+                            <option value="">-- Selecionar Endereço --</option>
+                            {addresses.map(addr => (
+                                <option key={addr.id} value={addr.id}>
+                                    {addr.street}, {addr.number} - {addr.neighborhood}, {addr.city}/{addr.state} ({addr.cep})
+                                </option>
+                            ))}
+                            <option value="new">Cadastrar novo endereço</option>
+                        </select>
+
+                        {/* Formulário de Novo Endereço (condicional) */}
+                        {showNewAddressForm && (
+                            <div style={addressFormStyle}>
+                                <h5 style={{ gridColumn: '1 / -1', margin: '0 0 10px', color: '#555' }}>Cadastrar Novo Endereço</h5>
+                                <div style={formGroupStyle}>
+                                    <label htmlFor="newCep" style={{ fontSize: '0.9em', marginBottom: '3px' }}>CEP:</label>
+                                    <input
+                                        type="text"
+                                        id="newCep"
+                                        name="cep"
+                                        value={newAddress.cep}
+                                        onChange={handleNewAddressChange}
+                                        placeholder="00000-000"
+                                        style={formInputStyle}
+                                        maxLength="9"
+                                    />
+                                </div>
+                                <div style={formGroupStyle}>
+                                    <label htmlFor="newStreet" style={{ fontSize: '0.9em', marginBottom: '3px' }}>Rua:</label>
+                                    <input
+                                        type="text"
+                                        id="newStreet"
+                                        name="street"
+                                        value={newAddress.street}
+                                        onChange={handleNewAddressChange}
+                                        placeholder="Nome da Rua"
+                                        style={formInputStyle}
+                                    />
+                                </div>
+                                <div style={formGroupStyle}>
+                                    <label htmlFor="newNumber" style={{ fontSize: '0.9em', marginBottom: '3px' }}>Número:</label>
+                                    <input
+                                        type="text"
+                                        id="newNumber"
+                                        name="number"
+                                        value={newAddress.number}
+                                        onChange={handleNewAddressChange}
+                                        placeholder="123"
+                                        style={formInputStyle}
+                                    />
+                                </div>
+                                <div style={formGroupStyle}>
+                                    <label htmlFor="newComplement" style={{ fontSize: '0.9em', marginBottom: '3px' }}>Complemento (opc.):</label>
+                                    <input
+                                        type="text"
+                                        id="newComplement"
+                                        name="complement"
+                                        value={newAddress.complement}
+                                        onChange={handleNewAddressChange}
+                                        placeholder="Apto, Bloco, etc."
+                                        style={formInputStyle}
+                                    />
+                                </div>
+                                <div style={formGroupStyle}>
+                                    <label htmlFor="newNeighborhood" style={{ fontSize: '0.9em', marginBottom: '3px' }}>Bairro:</label>
+                                    <input
+                                        type="text"
+                                        id="newNeighborhood"
+                                        name="neighborhood"
+                                        value={newAddress.neighborhood}
+                                        onChange={handleNewAddressChange}
+                                        placeholder="Seu Bairro"
+                                        style={formInputStyle}
+                                    />
+                                </div>
+                                <div style={formGroupStyle}>
+                                    <label htmlFor="newCity" style={{ fontSize: '0.9em', marginBottom: '3px' }}>Cidade:</label>
+                                    <input
+                                        type="text"
+                                        id="newCity"
+                                        name="city"
+                                        value={newAddress.city}
+                                        onChange={handleNewAddressChange}
+                                        placeholder="Sua Cidade"
+                                        style={formInputStyle}
+                                    />
+                                </div>
+                                <div style={formGroupStyle}>
+                                    <label htmlFor="newState" style={{ fontSize: '0.9em', marginBottom: '3px' }}>Estado (UF):</label>
+                                    <input
+                                        type="text"
+                                        id="newState"
+                                        name="state"
+                                        value={newAddress.state}
+                                        onChange={handleNewAddressChange}
+                                        placeholder="UF"
+                                        maxLength="2"
+                                        style={formInputStyle}
+                                    />
+                                </div>
+                                <button onClick={handleSaveNewAddress} style={saveAddressButtonStyle}>
+                                    Salvar Endereço
+                                </button>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* --- Payment Method Selection --- */}
+                    <div style={paymentMethodSectionStyle}>
+                        <h4 style={{ margin: '0 0 15px', color: '#343a40' }}>Método de Pagamento</h4>
+                        <div style={paymentMethodGridStyle}>
+                            <button
+                                style={paymentOptionButtonStyle('credito')}
+                                onClick={() => setPaymentMethod('credito')}
+                                onMouseEnter={(e) => Object.assign(e.currentTarget.style, paymentOptionHoverStyle)}
+                                onMouseLeave={(e) => Object.assign(e.currentTarget.style, paymentOptionButtonStyle('credito'))}
+                            >
+                                {creditCardIcon}
+                                Cartão de Crédito / Débito
+                            </button>
+                            <button
+                                style={paymentOptionButtonStyle('dinheiro')}
+                                onClick={() => setPaymentMethod('dinheiro')}
+                                onMouseEnter={(e) => Object.assign(e.currentTarget.style, paymentOptionHoverStyle)}
+                                onMouseLeave={(e) => Object.assign(e.currentTarget.style, paymentOptionButtonStyle('dinheiro'))}
+                            >
+                                <img src={iconDinheiro} alt="Dinheiro" style={{ width: 28, height: 28, marginBottom: 5 }} />
+                                Dinheiro
+                            </button>
+                            <button
+                                style={paymentOptionButtonStyle('pix')}
+                                onClick={() => setPaymentMethod('pix')}
+                                onMouseEnter={(e) => Object.assign(e.currentTarget.style, paymentOptionHoverStyle)}
+                                onMouseLeave={(e) => Object.assign(e.currentTarget.style, paymentOptionButtonStyle('pix'))}
+                            >
+                                <img src={iconPix} alt="Pix" style={{ width: 28, height: 28, marginBottom: 5 }} />
+                                Pix
+                            </button>
+                        </div>
                     </div>
 
                     <footer style={footerStyle}>
@@ -556,6 +930,12 @@ export default function CarrinhoDeCompras() {
                             <p style={totalTextStyle}>Subtotal</p>
                             <p style={totalPriceStyle}>R${subtotal.toFixed(2).replace('.', ',')}</p>
                         </div>
+                        {discount > 0 && (
+                            <div style={totalRowStyle}>
+                                <p style={{ ...totalTextStyle, color: '#28a745' }}>Desconto</p>
+                                <p style={{ ...totalPriceStyle, color: '#28a745' }}>-R${discount.toFixed(2).replace('.', ',')}</p>
+                            </div>
+                        )}
                         <div style={totalRowStyle}>
                             <p style={totalTextStyle}>Taxa de Entrega</p>
                             <p style={totalPriceStyle}>R${deliveryFee.toFixed(2).replace('.', ',')}</p>
