@@ -9,7 +9,6 @@ import Services from './components/Services';
 import Portfolio from './components/Portfolio';
 import About from './components/About';
 import Teams from './components/Teams';
-import Contact from './components/contact'; // Componente de V2
 import Footer from './components/Footer';
 import PortfolioModals from './components/portflioModal';
 import Login from './components/Login';
@@ -21,7 +20,6 @@ import ClienteEdit from './components/ClienteEdit';
 // import Cardapio from './components/Cardapio';            
 import FuncionarioRoute from './components/FuncionarioRoute'; // Rota protegida de V2
 
-// Componente Home (usando a versão V2 que inclui Contact)
 function Home() {
   return (
     <>
@@ -31,7 +29,6 @@ function Home() {
       <Portfolio />
       <About />
       <Teams />
-      <Contact /> {/* Incluído da V2 */}
       <Footer />
       <PortfolioModals />
     </>
