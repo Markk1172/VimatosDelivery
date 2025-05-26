@@ -138,7 +138,7 @@ Siga os passos abaixo para configurar e executar o projeto localmente.
     ```
     A aplicação frontend estará acessível em `http://localhost:3000/`. Ela se comunicará automaticamente com o backend.
 
-    ## Integrantes do Grupo
+    ## Integrantes do Grupo - Estudantes do UDF - Brasília - Distrito Federal
 
 * Amanda Beatriz Guimarães Alves - RGM : 38746689 
 * Gabriel Oliveira dos Santos - RGM : 38769662
