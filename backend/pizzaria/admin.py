@@ -39,8 +39,8 @@ class BebidaAdmin(admin.ModelAdmin):
 
 class ItemPedidoInline(admin.TabularInline): 
     model = ItemPedido
-    extra = 1 # Quantos formulários de item em branco mostrar
-    raw_id_fields = ('pizza', 'bebida') # Facilita a seleção de produtos se houver muitos
+    extra = 1 
+    raw_id_fields = ('pizza', 'bebida') 
 
 # Registra o modelo Pedido
 @admin.register(Pedido)
@@ -64,17 +64,4 @@ class PedidoAdmin(admin.ModelAdmin):
             return obj.motoboy.nome
         return "N/A"
 
-# Você também pode registrar ItemPedido separadamente se quiser gerenciá-los individualmente,
-# mas com o inline no PedidoAdmin geralmente é suficiente.
-# @admin.register(ItemPedido)
-# class ItemPedidoAdmin(admin.ModelAdmin):
-#     list_display = ('get_pedido_id', 'get_produto_nome', 'quantidade', 'subtotal_item')
-#     raw_id_fields = ('pedido', 'pizza', 'bebida')
 
-#     @admin.display(description='Pedido ID')
-#     def get_pedido_id(self, obj):
-#         return obj.pedido.id
-
-#     @admin.display(description='Produto')
-#     def get_produto_nome(self, obj):
-#         return obj.produto_nome
