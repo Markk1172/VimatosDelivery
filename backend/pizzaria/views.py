@@ -339,7 +339,7 @@ class AplicarDescontoPizzaView(APIView):
 # Utiliza `viewsets.ModelViewSet` para fornecer operações CRUD padrão,
 # mas adiciona ações personalizadas e lógicas de permissão/query.
 class PedidoViewSet(viewsets.ModelViewSet):
-    queryset = Pedido.objects.all().order_by('-data_pedido')
+    queryset = Pedido.objects.all().order_by('data_pedido')
     serializer_class = PedidoSerializer
 
     # Filtra os pedidos com base no tipo de usuário logado.
