@@ -35,34 +35,34 @@ O projeto foi desenvolvido utilizando uma arquitetura Cliente-Servidor, com as s
 
 ## Estrutura dos Arquivos
 
-VimatosDelivery/
-├── backend/                  # Contém o projeto Django (API)
-│   ├── core/                 # Configurações principais do Django (settings.py, urls.py)
-│   ├── pizzaria/             # Aplicação Django com a lógica da pizzaria (models.py, views.py, serializers.py, urls.py)
-│   │   ├── migrations/       # Migrações do banco de dados
-│   │   ├── admin.py
-│   │   ├── apps.py
-│   │   ├── models.py
-│   │   ├── permissions.py
-│   │   ├── serializers.py
-│   │   ├── tests.py
-│   │   ├── urls.py
-│   │   └── views.py
-│   └── manage.py             # Utilitário de linha de comando do Django
-├── frontend1/                # Contém o projeto React (Interface do Usuário)
-│   ├── public/               # Arquivos estáticos e index.html
-│   │   ├── assets/
-│   │   └── index.html
-│   ├── src/                  # Código fonte do React
-│   │   ├── assets/           # CSS e JS globais
-│   │   ├── components/       # Componentes React reutilizáveis (Navbar, Cardapio, Carrinho, etc.)
-│   │   ├── App.js            # Componente principal da aplicação
-│   │   ├── App.css
-│   │   ├── index.js          # Ponto de entrada da aplicação React
-│   │   └── index.css
-│   ├── package.json          # Dependências e scripts do Node.js
-│   └── package-lock.json
-└── README.md                 # Este arquivo
+VimatosDelivery/<br>
+├── backend/                  # Contém o projeto Django (API)<br>
+│   ├── core/                 # Configurações principais do Django (settings.py, urls.py)<br>
+│   ├── pizzaria/             # Aplicação Django com a lógica da pizzaria (models.py, views.py, serializers.py, urls.py)<br>
+│   │   ├── migrations/       # Migrações do banco de dados<br>
+│   │   ├── admin.py<br>
+│   │   ├── apps.py<br>
+│   │   ├── models.py<br>
+│   │   ├── permissions.py<br>
+│   │   ├── serializers.py<br>
+│   │   ├── tests.py<br>
+│   │   ├── urls.py<br>
+│   │   └── views.py<br>
+│   └── manage.py             # Utilitário de linha de comando do Django<br>
+├── frontend1/                # Contém o projeto React (Interface do Usuário)<br>
+│   ├── public/               # Arquivos estáticos e index.html<br>
+│   │   ├── assets/<br>
+│   │   └── index.html<br>
+│   ├── src/                  # Código fonte do React<br>
+│   │   ├── assets/           # CSS e JS globais<br>
+│   │   ├── components/       # Componentes React reutilizáveis (Navbar, Cardapio, Carrinho, etc.)<br>
+│   │   ├── App.js            # Componente principal da aplicação<br>
+│   │   ├── App.css<br>
+│   │   ├── index.js          # Ponto de entrada da aplicação React<br>
+│   │   └── index.css<br>
+│   ├── package.json          # Dependências e scripts do Node.js<br>
+│   └── package-lock.json<br>
+└── README.md                 # Este arquivo<br>
 
 ## Instruções de Execução
 
