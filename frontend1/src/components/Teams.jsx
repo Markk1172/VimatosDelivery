@@ -46,7 +46,7 @@ const teamMembers = [
     },
     {
         name: "Marcos Vinicius", 
-        role: "Desenvolvedor Back-End",
+        role: "Desenvolvedor Full Stack",
         img: img5,
         socials: [
             { icon: "fab fa-github", label: "GitHub Profile", href: "https://github.com/Markk1172" },
