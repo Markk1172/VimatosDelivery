@@ -5,12 +5,10 @@ import iconPix from '../assets/img/pix.png';
 import iconDinheiro from '../assets/img/dollar.png';
 import fundoPizza from '../assets/img/fundo_pizza1.jpeg';
 
-// --- SVGs de Ícones ---
 const shoppingCartIcon = ( <svg width="28" height="28" viewBox="0 0 32 32" fill="none" style={{ verticalAlign: 'middle' }} xmlns="http://www.w3.org/2000/svg"> <g transform="translate(6.8,6.8)"> <circle cx="5" cy="17" r="1.5" fill="rgb(52, 58, 64)"/><circle cx="14" cy="17" r="1.5" fill="rgb(52, 58, 64)"/><path d="M-1 0H1L2.68 12.39C2.84 13.66 3.91 14.67 5.19 14.67H14.5C15.78 14.67 16.85 13.66 17.01 12.39L17.82 5.39C17.93 4.47 17.21 3.67 16.28 3.67H3.12" stroke="rgb(52, 58, 64)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/> </g> </svg> );
 const userIcon = ( <svg width="28" height="28" viewBox="0 0 32 32" fill="none" style={{ verticalAlign: 'middle' }} xmlns="http://www.w3.org/2000/svg"> <g> <circle cx="16" cy="13" r="5" fill="rgb(52, 58, 64)" /> <path d="M8 25c0-4 4-7 8-7s8 3 8 7" fill="rgb(52, 58, 64)" /> </g> </svg> );
 const creditCardIcon = <span style={{ fontSize: '1.5em', marginBottom: '5px' }}>💳</span>;
 
-// --- Navbar Integrada ---
 const InternalNavbar = () => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -87,7 +85,6 @@ export default function CarrinhoDeCompras() {
         try {
             const localCart = localStorage.getItem('cart');
             const parsedCart = localCart ? JSON.parse(localCart) : [];
-            // Mantém a lógica de fallback, mas agora handleFinalizarCompra é mais robusto
             return parsedCart.map(item => ({
                 ...item,
                 tipo: item.tipo || (item.name?.toLowerCase().includes('pizza') ? 'Pizza' : 'Bebida')
@@ -374,13 +371,11 @@ export default function CarrinhoDeCompras() {
         const accessToken = localStorage.getItem('accessToken');
         if (!clienteId || !accessToken) { setCouponMessage({text: "Erro de autenticação. Faça login novamente.", type: 'error'}); setIsSubmittingOrder(false); return;}
 
-        // --- LÓGICA MELHORADA ---
         const itens_data_para_backend = cartItems.map(cartItem => {
             const itemPayload = {
                 quantidade: cartItem.quantity,
             };
 
-            // Garante que 'tipo' exista e converte para minúsculas para robustez.
             const tipoLower = (cartItem.tipo || '').toLowerCase();
 
             if (tipoLower === "pizza" || tipoLower === "sobremesa") {
@@ -388,7 +383,6 @@ export default function CarrinhoDeCompras() {
             } else if (tipoLower === "bebida") {
                 itemPayload.bebida = cartItem.id;
             } else {
-                // Se o tipo não for reconhecido, tenta um fallback pelo nome e loga um aviso.
                 const fallbackTipo = cartItem.name?.toLowerCase().includes('pizza') ? 'pizza' : 'bebida';
                 console.warn(`Tipo de item '${cartItem.tipo}' não reconhecido. Usando fallback '${fallbackTipo}':`, cartItem);
                 if (fallbackTipo === "pizza") {
@@ -398,21 +392,19 @@ export default function CarrinhoDeCompras() {
                 }
             }
             return itemPayload;
-        }).filter(item => item.pizza || item.bebida); // Garante que apenas itens válidos são enviados
+        }).filter(item => item.pizza || item.bebida); 
 
-        // Log para depuração: Veja no console o que está sendo preparado para envio.
         console.log("Itens (itens_data) a serem enviados para o backend:", itens_data_para_backend);
 
-        // Verificação extra: Se após o processamento o array estiver vazio, exibe erro.
         if (itens_data_para_backend.length === 0 && cartItems.length > 0) {
              setCouponMessage({text: "Erro: Nenhum item do carrinho pôde ser processado. Verifique os dados.", type: 'error'});
              setIsSubmittingOrder(false);
-             return; // Interrompe a função aqui
+             return; 
         }
 
         const pedidoPayload = {
             cliente: parseInt(clienteId),
-            itens_data: itens_data_para_backend, // Usa o array processado
+            itens_data: itens_data_para_backend, 
             tipo_entrega: (deliveryAddressOption === 'profile' || deliveryAddressOption === 'new') ? 'Entrega' : 'Retirada',
             endereco_entrega_formatado: (deliveryAddressOption === 'profile' || deliveryAddressOption === 'new') ? enderecoEntregaFinal : null,
             forma_pagamento: paymentMethod,
@@ -420,7 +412,6 @@ export default function CarrinhoDeCompras() {
             codigo_cupom: discount > 0 ? couponCode : null,
         };
 
-        // Log para depuração: Veja o payload completo.
         console.log("Payload completo do pedido:", pedidoPayload);
 
         setCouponMessage({text: "Enviando pedido...", type: 'info'});
@@ -443,20 +434,18 @@ export default function CarrinhoDeCompras() {
                 setNewAddress({ cep: '', street: '', number: '', complement: '', neighborhood: '', city: '', state: '' });
             } else {
                 let errorMsg = "Erro ao finalizar pedido.";
-                // Tenta extrair a mensagem de erro do backend de forma mais detalhada
                 if (responseData && typeof responseData === 'object') {
                     errorMsg = Object.entries(responseData)
                                .map(([key, value]) => `${key}: ${Array.isArray(value) ? value.join(', ') : value}`)
                                .join('; ');
                 } else if (typeof responseData === 'string') { errorMsg = responseData; }
-                // Se a mensagem específica for a que recebemos, exibe ela.
                 if (responseData.itens_data && Array.isArray(responseData.itens_data)) {
                     errorMsg = `itens_data: ${responseData.itens_data[0]}`;
                 }
                 setCouponMessage({text: `Erro: ${errorMsg}`, type: 'error'});
             }
         } catch (error) {
-            console.error("Erro na requisição fetch:", error); // Loga o erro de rede no console
+            console.error("Erro na requisição fetch:", error); 
             setCouponMessage({text: 'Erro de rede ao finalizar pedido. Verifique o console.', type: 'error'});
         } finally {
             setIsSubmittingOrder(false);
@@ -470,7 +459,6 @@ export default function CarrinhoDeCompras() {
         navigateGlobal('/pedidos');
     };
 
-    // --- Estilos ---
     const pageContainerStyle = { minHeight: '100vh', margin: 0, padding: 0, fontFamily: 'Raleway, sans-serif', display: 'flex', flexDirection: 'column', backgroundImage: `url(${fundoPizza})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundAttachment: 'fixed' };
     const contentWrapperStyle = { paddingTop: 'calc(1rem + 2rem + 1px + 50px)', flexGrow: 1, marginBottom: '2rem' };
     const carrinhoBoxStyle = { width: '90%', maxWidth: '600px', margin: '0 auto', borderRadius: '12px', boxShadow: '0 8px 25px rgba(0, 0, 0, 0.15)', backgroundColor: '#fff', overflow: 'hidden' };

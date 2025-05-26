@@ -37,7 +37,6 @@ const portfolioItems = [
     img: "/assets/img/portfolio/6.jpg",
     modal: "#portfolioModal6",
   },
-  // Adicione mais itens conforme necessário
 ];
 
 function Portfolio() {

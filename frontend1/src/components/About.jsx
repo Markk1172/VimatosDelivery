@@ -35,8 +35,6 @@ const timelineEvents = [
     },
 ];
 
-// ...restante do componente igual...
-
 const About = () => (
     <section className="page-section" id="about">
         <div className="container">

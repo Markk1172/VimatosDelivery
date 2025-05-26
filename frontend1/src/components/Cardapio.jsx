@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import logo from '../assets/img/logo.png';
-
-// Imagens (mantidas como no seu código original)
 import pizza3Queijos from '../assets/img/portfolio/24.jpg';
 import pizzaCalabresa from '../assets/img/portfolio/1.jpg';
 import pizzaQueijo from '../assets/img/portfolio/3.jpg';
@@ -23,7 +21,6 @@ import pizzaDoceOvomaltine from '../assets/img/portfolio/5.jpg';
 import pizzaDoceMms from '../assets/img/portfolio/9.jpg';  
 
 
-// --- SVGs de Ícones (para a Navbar do Cardápio) ---
 const shoppingCartIcon = ( <svg width="28" height="28" viewBox="0 0 32 32" fill="none" style={{ verticalAlign: 'middle' }} xmlns="http://www.w3.org/2000/svg"> <g transform="translate(6.8,6.8)"> <circle cx="5" cy="17" r="1.5" fill="rgb(52, 58, 64)"/> <circle cx="14" cy="17" r="1.5" fill="rgb(52, 58, 64)"/> <path d="M-1 0H1L2.68 12.39C2.84 13.66 3.91 14.67 5.19 14.67H14.5C15.78 14.67 16.85 13.66 17.01 12.39L17.82 5.39C17.93 4.47 17.21 3.67 16.28 3.67H3.12" stroke="rgb(52, 58, 64)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/> </g> </svg> );
 const userIcon = ( 
     <svg width="28" height="28" viewBox="0 0 32 32" fill="none" style={{ verticalAlign: 'middle' }} xmlns="http://www.w3.org/2000/svg">
@@ -56,9 +53,6 @@ const allMenuItems = [
     { id: 22, name: 'Pizza Doce M&M®', image: pizzaDoceMms, ingredients: 'Coberta com creme de baunilha, brigadeiro de chocolate e M&M®.', price: 'R$ 52,00', category: 'sobremesa' },
 ];
 
-// --- ESTILOS ---
-// (Cole todos os seus objetos de estilo aqui: navbarStyle, brandStyle, ..., cardHoverStyle, modalOverlayStyle, etc.)
-// Omitidos aqui para não repetir o bloco gigante de estilos, mas eles devem estar aqui.
 const navbarStyle = { backgroundColor: 'rgb(248, 249, 250)', borderBottom: '1px solid #dee2e6', padding: '0.8rem 2rem', position: 'sticky', top: 0, zIndex: 1000, display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontFamily: 'Arial, sans-serif' };
 const brandStyle = { fontWeight: 700, fontSize: '1.25rem', display: 'flex', alignItems: 'center', gap: '10px', color: 'rgb(52, 58, 64)', textDecoration: 'none' };
 const categoryLinksStyle = { display: 'flex', gap: '2rem', flexGrow: 1, justifyContent: 'center', listStyle: 'none', margin: '0', padding: '0' };
@@ -90,7 +84,7 @@ const dropdownToggleButtonStyle = {
     border: "none",
     padding: '0',
     boxShadow: "none",
-    backgroundImage: 'none', // Chave para remover o caret do BS5
+    backgroundImage: 'none', 
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -109,7 +103,6 @@ const continueShoppingButtonStyle = { ...modalButtonStyle, backgroundColor: '#6c
 const goToCartButtonStyle = { ...modalButtonStyle, backgroundColor: '#cf301d', color: 'white' };
 
 
-// --- NOVO COMPONENTE PARA O CARD DO ITEM ---
 const MenuItemCard = ({ item, onOrderClick }) => {
     const [isCardHovered, setIsCardHovered] = useState(false);
 
@@ -131,7 +124,6 @@ const MenuItemCard = ({ item, onOrderClick }) => {
         </div>
     );
 };
-// --- FIM DO NOVO COMPONENTE ---
 
 
 const Cardapio = () => {
@@ -141,7 +133,7 @@ const Cardapio = () => {
     const [activeCategory, setActiveCategory] = useState('todos');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [lastAddedItemName, setLastAddedItemName] = useState('');
-    const [categoryHoverStates, setCategoryHoverStates] = useState({ // Estado para hover dos links de categoria
+    const [categoryHoverStates, setCategoryHoverStates] = useState({ 
         todos: false, pizza: false, bebida: false, sobremesa: false
     });
 
@@ -252,9 +244,9 @@ const Cardapio = () => {
                         <>
                             <div className="dropdown">
                                 <button
-                                    className="btn dropdown-toggle" // Classes do Bootstrap para funcionalidade
+                                    className="btn dropdown-toggle" 
                                     type="button"
-                                    id="dropdownUsuario" // Ou um ID único como "dropdownUsuarioCardapio"
+                                    id="dropdownUsuario" 
                                     data-bs-toggle="dropdown"    
                                     aria-expanded="false"
                                     style={dropdownToggleButtonStyle} 

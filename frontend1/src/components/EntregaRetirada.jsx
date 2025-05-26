@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import logo from '../assets/img/logo.png'; // Verifique o caminho do logo
+import logo from '../assets/img/logo.png'; 
 
-// --- SVGs de Ícones para a Navbar ---
 const shoppingCartIcon = ( <svg width="28" height="28" viewBox="0 0 32 32" fill="none" style={{ verticalAlign: 'middle' }} xmlns="http://www.w3.org/2000/svg"> <g transform="translate(6.8,6.8)"> <circle cx="5" cy="17" r="1.5" fill="rgb(52, 58, 64)"/><circle cx="14" cy="17" r="1.5" fill="rgb(52, 58, 64)"/><path d="M-1 0H1L2.68 12.39C2.84 13.66 3.91 14.67 5.19 14.67H14.5C15.78 14.67 16.85 13.66 17.01 12.39L17.82 5.39C17.93 4.47 17.21 3.67 16.28 3.67H3.12" stroke="rgb(52, 58, 64)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/> </g> </svg> );
 
-// --- Navbar Principal (definida dentro deste arquivo para este exemplo) ---
 const Navbar = () => {
     const [hoveredLink, setHoveredLink] = useState(null);
     const [loggedInUser, setLoggedInUser] = useState(null);
@@ -98,7 +96,6 @@ const Navbar = () => {
     );
 };
 
-// --- Componente PedidoCardEntrega ---
 const PedidoCardEntrega = ({ pedido, onMarcarEmRota, onMarcarEntregueRetirado }) => {
     const [hover, setHover] = useState(false);
     const cardStyle = { width: '100%', maxWidth: '380px',
@@ -162,7 +159,6 @@ const PedidoCardEntrega = ({ pedido, onMarcarEmRota, onMarcarEntregueRetirado })
     );
 };
 
-// --- Componente EntregaRetirada ---
 const EntregaRetirada = () => {
     const [allFetchedPedidos, setAllFetchedPedidos] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -265,7 +261,6 @@ const EntregaRetirada = () => {
     const pedidosProntosParaSair = allFetchedPedidos.filter(p => p.statusOriginal === 'Pronto para Entrega' || p.statusOriginal === 'Retirada');
     const pedidosEmRota = allFetchedPedidos.filter(p => p.statusOriginal === 'Em Rota');
 
-    // Estilos
     const pageStyle = { backgroundColor: '#E9E9E9', minHeight: '100vh', paddingBottom: '2rem', display: 'flex', flexDirection: 'column' };
     const h2Style = { width: '100%', textAlign: 'center', marginTop: '3rem', marginBottom: '1rem', fontWeight: 700, fontSize: '2.5rem', color: '#333' };
     const twoColumnLayoutContainerStyle = { display: 'flex', flexDirection: 'row', gap: '2rem', width: '95%', maxWidth: '1400px', margin: '2rem auto', flexGrow: 1, };

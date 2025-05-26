@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import backgroundImage from '../assets/img/login.jpg';
 import logo from '../assets/img/logo.png';
-import ConfirmModal from './confirmModal'; // Garanta que o nome do arquivo é 'confirmModal.jsx' ou ajuste o import
+import ConfirmModal from './confirmModal'; 
 
 const ClienteEdit = () => {
   const navigate = useNavigate();
@@ -139,7 +139,7 @@ const ClienteEdit = () => {
   };
 
   const handleSaveClick = (e) => {
-      e.preventDefault(); // Previne qualquer comportamento padrão (importante!)
+      e.preventDefault(); 
       setIsSaveModalOpen(true);
   };
 
@@ -320,7 +320,6 @@ const ClienteEdit = () => {
         {!loading && !formData.nome && clienteId ? (
             <p className="loading-text">Não foi possível carregar os dados do perfil.</p>
         ) : (
-          // Removido onSubmit, usaremos onClick no botão
           <form> 
             <label htmlFor="nome" className="form-label">Nome Completo:</label>
             <input
@@ -386,16 +385,14 @@ const ClienteEdit = () => {
               readOnly 
             />
            
-            {/* **** ALTERAÇÃO AQUI **** */}
             <button 
-              type="button" // Mudado para "button"
+              type="button" 
               className="btn" 
               disabled={loading}
-              onClick={handleSaveClick} // Adicionado onClick
+              onClick={handleSaveClick} 
             >
               {loading ? 'Salvando...' : 'Salvar Alterações'}
             </button>
-            {/* **** FIM DA ALTERAÇÃO **** */}
 
             <button 
               type="button" 
@@ -409,7 +406,6 @@ const ClienteEdit = () => {
         )}
       </div>
       
-      {/* Modal de Exclusão */}
       <ConfirmModal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)} 
@@ -417,7 +413,6 @@ const ClienteEdit = () => {
         title="Confirmar Exclusão"
         message="Tem certeza que deseja excluir sua conta? Esta ação não pode ser desfeita."
       />
-      {/* Modal de Salvamento */}
       <ConfirmModal
         isOpen={isSaveModalOpen}
         onClose={() => setIsSaveModalOpen(false)} 

@@ -2,11 +2,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import logo from '../assets/img/logo.png';
 
-// --- SVGs de Ícones ---
 const shoppingCartIcon = ( <svg width="28" height="28" viewBox="0 0 32 32" fill="none" style={{ verticalAlign: 'middle' }} xmlns="http://www.w3.org/2000/svg"> <g transform="translate(6.8,6.8)"> <circle cx="5" cy="17" r="1.5" fill="rgb(52, 58, 64)"/><circle cx="14" cy="17" r="1.5" fill="rgb(52, 58, 64)"/><path d="M-1 0H1L2.68 12.39C2.84 13.66 3.91 14.67 5.19 14.67H14.5C15.78 14.67 16.85 13.66 17.01 12.39L17.82 5.39C17.93 4.47 17.21 3.67 16.28 3.67H3.12" stroke="rgb(52, 58, 64)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/> </g> </svg> );
 const userIcon = ( <svg width="28" height="28" viewBox="0 0 32 32" fill="none" style={{ verticalAlign: 'middle' }} xmlns="http://www.w3.org/2000/svg"> <g> <circle cx="16" cy="13" r="5" fill="rgb(52, 58, 64)" /> <path d="M8 25c0-4 4-7 8-7s8 3 8 7" fill="rgb(52, 58, 64)" /> </g> </svg> );
 
-// --- Navbar Integrada ---
 const InternalNavbar = () => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -75,7 +73,6 @@ const InternalNavbar = () => {
     );
 };
 
-// --- Componente MeusPedidos ---
 export default function MeusPedidos() {
     const navigate = useNavigate();
 
@@ -133,11 +130,7 @@ export default function MeusPedidos() {
                     deliveryAddress: pedido.endereco_entrega_formatado || 'Retirada no local',
                     paymentMethod: pedido.forma_pagamento,
                     deliveryFee: parseFloat(pedido.taxa_entrega_aplicada || 0),
-                    // --- ADICIONADO: Tenta obter o nome do motoboy ---
                     motoboyName: pedido.motoboy_nome || null
-                    // Se o campo no backend for, por exemplo, pedido.motoboy.nome, ajuste para:
-                    // motoboyName: pedido.motoboy ? pedido.motoboy.nome : null
-                    // --- FIM DA ADIÇÃO ---
                 };
 
                 if (ongoingStatuses.includes(pedido.status)) {
@@ -147,9 +140,7 @@ export default function MeusPedidos() {
                 }
             });
 
-            // Ordena os pedidos em andamento (mais recentes primeiro)
             currentOngoing.sort((a, b) => b.dateObject - a.dateObject);
-            // Ordena o histórico (mais recentes primeiro)
             currentHistory.sort((a, b) => b.dateObject - a.dateObject);
 
 
@@ -225,7 +216,6 @@ export default function MeusPedidos() {
         }
     };
 
-    // --- Estilos (Mantidos) ---
     const pageContainerStyle = { minHeight: '100vh', margin: 0, padding: 0, backgroundColor: '#E9E9E9', fontFamily: 'Raleway, sans-serif', display: 'flex', flexDirection: 'column', };
     const contentWrapperStyle = { flexGrow: 1, marginBottom: '2rem', width: '80%', maxWidth: '900px', margin: '50px auto 2rem auto', };
     const sectionTitleStyle = { color: '#cf301d', fontSize: '2em', marginBottom: '25px', textAlign: 'center', fontWeight: '700', borderBottom: '2px solid #cf301d', paddingBottom: '10px', };
@@ -286,14 +276,12 @@ export default function MeusPedidos() {
                 <div style={orderDetailsStyle}>
                     <div style={detailItemStyle}><span style={detailLabelStyle}>Endereço:</span><span>{order.deliveryAddress}</span></div>
                     <div style={detailItemStyle}><span style={detailLabelStyle}>Pagamento:</span><span>{order.paymentMethod}</span></div>
-                    {/* --- ADICIONADO: Exibe o nome do motoboy se disponível --- */}
                     {order.motoboyName && (
                         <div style={detailItemStyle}>
                             <span style={detailLabelStyle}>Entregador:</span>
                             <span>{order.motoboyName}</span>
                         </div>
                     )}
-                    {/* --- FIM DA ADIÇÃO --- */}
                 </div>
                 <ul style={itemsListStyle}>
                     <span style={detailLabelStyle}>Itens:</span>

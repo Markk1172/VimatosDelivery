@@ -1,5 +1,5 @@
 import React from 'react';
-import '../assets/css/styles.css'; // Caminho corrigido
+import '../assets/css/styles.css'; 
 
 function Services() {
     return (
@@ -14,8 +14,8 @@ function Services() {
                 <div className="row text-center">
                     <div className="col-md-4">
                         <span className="fa-stack fa-4x">
-                        <i className="fas fa-circle fa-stack-2x text-danger"></i> {/* fundo vermelho */}
-                        <i className="fas fa-pizza-slice fa-stack-1x fa-inverse"></i> {/* ícone branco */}
+                        <i className="fas fa-circle fa-stack-2x text-danger"></i> 
+                        <i className="fas fa-pizza-slice fa-stack-1x fa-inverse"></i> 
                     </span>
 
                         <h4 className="my-3">Pizzas</h4>

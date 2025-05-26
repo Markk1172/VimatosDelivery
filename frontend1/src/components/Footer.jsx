@@ -1,8 +1,8 @@
 import React from 'react';
 
 function Footer() {
-  const phoneNumber = '+5561999990000'; // Substitua pelo seu número de telefone com o código do país e DDD
-  const displayPhoneNumber = '(61) 99999-0000'; // Como o número será exibido
+  const phoneNumber = '+5561999990000'; 
+  const displayPhoneNumber = '(61) 99999-0000'; 
 
   const locationLink = 'https://maps.app.goo.gl/9aRoX3cbzzpADzyLA';
   const displayLocation = 'Brasília, DF - Brazil';

@@ -49,11 +49,11 @@ const modalStyles = {
     transition: 'background-color 0.3s ease, transform 0.2s ease',
   },
   confirmButton: {
-    backgroundColor: '#CF301D', // Vermelho principal
+    backgroundColor: '#CF301D', 
     color: 'white',
   },
   cancelButton: {
-    backgroundColor: '#6c757d', // Cinza para cancelar
+    backgroundColor: '#6c757d', 
     color: 'white',
   }
 };
@@ -64,8 +64,8 @@ const ConfirmModal = ({ isOpen, onClose, onConfirm, title, message }) => {
   }
 
   return (
-    <div style={modalStyles.overlay} onClick={onClose}> {/* Permite fechar clicando fora */}
-      <div style={modalStyles.content} onClick={(e) => e.stopPropagation()}> {/* Evita fechar ao clicar dentro do conteúdo */}
+    <div style={modalStyles.overlay} onClick={onClose}> 
+      <div style={modalStyles.content} onClick={(e) => e.stopPropagation()}> 
         <h2 style={modalStyles.title}>{title || "Confirmar Ação"}</h2>
         <p style={modalStyles.message}>{message || "Você tem certeza?"}</p>
         <div style={modalStyles.buttons}>

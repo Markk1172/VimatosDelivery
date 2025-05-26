@@ -1,11 +1,10 @@
 import React from "react";
 import { useNavigate } from 'react-router-dom';
 
-// Dados dos Modais ATUALIZADOS com databaseId e preços
 const portfolioModalsData = [
     {
-        id: "portfolioModal1", // ID para o HTML do modal
-        databaseId: 2,          // ID do produto no banco de dados (da lista allMenuItems: Pizza Calabresa)
+        id: "portfolioModal1", 
+        databaseId: 2,          
         title: "Calabresa",
         subtitle: "Clássica.",
         img: "/assets/img/portfolio/1.jpg",
@@ -15,7 +14,7 @@ const portfolioModalsData = [
     },
     {
         id: "portfolioModal2",
-        databaseId: 999, // !!! ATENÇÃO: ID placeholder para Portuguesa. Verifique/adicione no seu backend e allMenuItems !!!
+        databaseId: 999, 
         title: "Portuguesa",
         subtitle: "Colonizante não?",
         img: "/assets/img/portfolio/2.jpg",
@@ -25,7 +24,7 @@ const portfolioModalsData = [
     },
     {
         id: "portfolioModal3",
-        databaseId: 3,          // ID da Pizza de Queijo (Muçarela)
+        databaseId: 3,         
         title: "Muçarela",
         subtitle: "Básica, mas extraordinária.",
         img: "/assets/img/portfolio/3.jpg",
@@ -35,7 +34,7 @@ const portfolioModalsData = [
     },
     {
         id: "portfolioModal4",
-        databaseId: 7,          // ID da Coca-Cola Lata 350ml
+        databaseId: 7,         
         title: "Coca-Cola",
         subtitle: "Refrigerante, sempre uma boa pedida!.",
         img: "/assets/img/portfolio/4.jpg",
@@ -45,17 +44,17 @@ const portfolioModalsData = [
     },
     {
         id: "portfolioModal5",
-        databaseId: 21,         // ID da Pizza Doce Ovomaltine®
+        databaseId: 21,       
         title: "Pizza Doce Ovomaltine",
         subtitle: "Doce, incrível e colorida.",
         img: "/assets/img/portfolio/5.jpg",
         description: "Doce na medida certa! Coberta com uma camada cremosa de chocolate ao leite, finalizada com confeitos, é a escolha perfeita para os amantes de sobremesa. Irresistivelmente deliciosa do início ao fim.",
-        category: "Sobremesa", // Se "Sobremesa" (Pizza Doce) é um tipo de Pizza no backend, ótimo.
+        category: "Sobremesa", 
         price: "R$ 55,00"
     },
     {
         id: "portfolioModal6",
-        databaseId: 6,          // ID da Pizza Frango c/ Requeijão (Catupiry)
+        databaseId: 6,          
         title: "Frango com Catupiry",
         subtitle: "Gostosa como nenhuma outra.",
         img: "/assets/img/portfolio/6.jpg",
@@ -77,23 +76,19 @@ function PortfolioModals() {
             return;
         }
 
-        // --- MUDANÇA IMPORTANTE AQUI ---
-        // O ID do item no carrinho agora será o databaseId, que é o ID real do produto.
-        // Se databaseId não existir no portfolioItem, usamos um fallback, mas o ideal é que sempre exista.
         const cartItemId = portfolioItem.databaseId || `fallback-${portfolioItem.id}`;
         if (!portfolioItem.databaseId) {
             console.warn(`Item ${portfolioItem.title} não possui databaseId. Usando fallback ID para o carrinho: ${cartItemId}`);
         }
 
         const cartItem = {
-            id: cartItemId, // Este ID será usado para identificar o item no carrinho E para enviar ao backend
+            id: cartItemId, 
             name: portfolioItem.title,
             price: priceNumber,
             quantity: 1,
             image: portfolioItem.img,
-            tipo: portfolioItem.category, // 'Pizza', 'Bebida', ou 'Sobremesa'
+            tipo: portfolioItem.category,
         };
-        // --- FIM DA MUDANÇA ---
 
         let cart = [];
         try {
@@ -116,7 +111,7 @@ function PortfolioModals() {
 
         try {
             localStorage.setItem('cart', JSON.stringify(cart));
-            const modalElement = document.getElementById(portfolioItem.id); // ID HTML do modal
+            const modalElement = document.getElementById(portfolioItem.id);
 
             if (modalElement) {
                 let modalInstance = null;
@@ -157,12 +152,12 @@ function PortfolioModals() {
             {portfolioModalsData.map((item) => (
                 <div
                     className="portfolio-modal modal fade"
-                    id={item.id} // ID do HTML para o Bootstrap
+                    id={item.id}
                     tabIndex={-1}
                     role="dialog"
                     aria-labelledby={`${item.id}Label`}
                     aria-hidden="true"
-                    key={item.id} // Key para o React
+                    key={item.id} 
                 >
                     <div className="modal-dialog modal-xl">
                         <div className="modal-content">

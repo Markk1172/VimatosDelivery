@@ -60,16 +60,15 @@ const Login = () => {
     const formData = new FormData(e.target);
     const rawData = Object.fromEntries(formData.entries());
 
-    // Mapeia os nomes dos campos do formulário para os esperados pelo backend
+
     const userDataForBackend = {
-        username: rawData.username, // Campo adicionado ao formulário
+        username: rawData.username,
         nome: rawData.name,
         email: rawData.email,
         password: rawData.password,
         data_nasc: rawData.birthdate,
         cpf: rawData.cpf,
         telefone: rawData.phone,
-        // endereco e cep foram removidos do formulário e não são enviados
     };
 
     try {
@@ -84,12 +83,10 @@ const Login = () => {
         showMessage('Registo realizado com sucesso! Faça login agora.', 'success');
         setRightPanelActive(false);
       } else {
-        // Tratamento de erro mais detalhado, caso o backend retorne erros por campo
         let errorMessage = 'Erro no registo.';
         if (data && typeof data === 'object') {
             const errorKeys = Object.keys(data);
             if (errorKeys.length > 0) {
-                // Pega a primeira mensagem de erro ou concatena algumas
                 const firstKey = errorKeys[0];
                 if (Array.isArray(data[firstKey])) {
                     errorMessage = `${firstKey}: ${data[firstKey].join(', ')}`;
@@ -390,7 +387,7 @@ const Login = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        overflow: "hidden", // Alterado para auto ou hidden dependendo do comportamento desejado em telas menores
+        overflow: "hidden", 
         position: "fixed",
         top: 0,
         left: 0,
@@ -406,24 +403,20 @@ const Login = () => {
       )}
 
       <div className={`container ${rightPanelActive ? "right-panel-active" : ""}`}>
-        {/* Cadastro */}
         <div className="container__form container--signup" id="signup-form">
           <form onSubmit={handleRegister} className="form">
             <h2 className="form__title">Cadastro</h2>
-            {/* Adicionado campo username */}
             <input name="username" type="text" placeholder="Nome de usuário" className="input" required />
             <input name="name" type="text" placeholder="Nome completo" className="input" required />
             <input name="email" type="email" placeholder="E-mail" className="input" required />
             <input name="phone" type="tel" placeholder="Telefone (somente números)" pattern="\d{10,11}" title="Telefone com DDD (10 ou 11 dígitos)" className="input" required />
             <input name="birthdate" type="date" placeholder="Data de nascimento" className="input" required />
             <input name="cpf" type="text" placeholder="CPF (somente números)" pattern="\d{11}" title="CPF com 11 dígitos" className="input" required />
-            {/* Campos de endereço e CEP removidos */}
             <input name="password" type="password" placeholder="Senha" className="input" required />
             <button type="submit" className="btn">Criar conta</button>
           </form>
         </div>
 
-        {/* Login */}
         <div className="container__form container--signin" id="login-form">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -439,7 +432,7 @@ const Login = () => {
               left: '20px',
               zIndex: 1000,
             }}
-            onClick={() => navigate('/')} // Alterado para navegar para a home
+            onClick={() => navigate('/')} 
           >
             <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0m3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z" />
           </svg>
@@ -465,7 +458,6 @@ const Login = () => {
           </form>
         </div>
 
-        {/* Painel de troca */}
         <div className="container__overlay">
           <div className="overlay" style={{ backgroundImage: `url(${backgroundImage})` }}>
             <div className="overlay__panel overlay--left">

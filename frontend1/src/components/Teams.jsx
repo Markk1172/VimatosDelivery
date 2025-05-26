@@ -73,7 +73,6 @@ const teamMembers = [
     },
 ];
 
-// ...restante do componente igual...
 
 const Teams = () => (
     <section className="page-section bg-light" id="team">

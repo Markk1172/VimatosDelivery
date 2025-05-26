@@ -382,7 +382,6 @@ const Cadastros = () => {
                 if (formData[key] instanceof File) {
                     submissionBody.append(key, formData[key]);
                 } else if (typeof formData[key] === 'string' && formData[key].startsWith('/media/')) {
-                    // Não envia o caminho antigo da imagem
                 } else {
                     submissionBody.append(key, formData[key]);
                 }

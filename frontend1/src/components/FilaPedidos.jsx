@@ -1,14 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import logo from '../assets/img/logo.png'; // Verifique o caminho
+import logo from '../assets/img/logo.png'; 
 
-// --- SVGs de Ícones para a Navbar ---
 const shoppingCartIcon = ( <svg width="28" height="28" viewBox="0 0 32 32" fill="none" style={{ verticalAlign: 'middle' }} xmlns="http://www.w3.org/2000/svg"> <g transform="translate(6.8,6.8)"> <circle cx="5" cy="17" r="1.5" fill="rgb(52, 58, 64)"/><circle cx="14" cy="17" r="1.5" fill="rgb(52, 58, 64)"/><path d="M-1 0H1L2.68 12.39C2.84 13.66 3.91 14.67 5.19 14.67H14.5C15.78 14.67 16.85 13.66 17.01 12.39L17.82 5.39C17.93 4.47 17.21 3.67 16.28 3.67H3.12" stroke="rgb(52, 58, 64)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/> </g> </svg> );
-// O userIcon SVG pode ser comentado ou removido se não for usado em outro lugar,
-// já que a Navbar foi simplificada para não usar o dropdown de ícone.
-// const userIcon = ( <svg width="28" height="28" viewBox="0 0 32 32" fill="none" style={{ verticalAlign: 'middle' }} xmlns="http://www.w3.org/2000/svg"> <g> <circle cx="16" cy="13" r="5" fill="rgb(52, 58, 64)" /> <path d="M8 25c0-4 4-7 8-7s8 3 8 7" fill="rgb(52, 58, 64)" /> </g> </svg> );
 
-// --- Navbar Principal (com autenticação simplificada) ---
 const Navbar = () => {
     const [hoveredLink, setHoveredLink] = useState(null);
     const [loggedInUser, setLoggedInUser] = useState(null);
@@ -94,7 +89,6 @@ const Navbar = () => {
     );
 };
 
-// --- Componente PedidoCard para FilaPedidos ---
 const PedidoCardFila = ({ pedido, onAvancarStatus, motoboys, onMotoboySelect, selectedMotoboyId }) => {
     const [hover, setHover] = useState(false);
     const pedidoCardStyle = { width: '100%', maxWidth: '380px', height: 'auto', minHeight: '450px', background: '#fff', borderRadius: '15px', boxShadow: hover ? '0 10px 25px rgba(0,0,0,0.2)' : '0 5px 15px rgba(0,0,0,0.1)', border: '1px solid #e0e0e0', padding: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', fontFamily: 'Arial, sans-serif', transition: 'all 0.3s ease', marginBottom: '20px' };
@@ -164,7 +158,6 @@ const PedidoCardFila = ({ pedido, onAvancarStatus, motoboys, onMotoboySelect, se
     );
 };
 
-// --- Componente FilaPedidos ---
 const FilaPedidos = () => {
     const [allFetchedPedidos, setAllFetchedPedidos] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -207,7 +200,6 @@ const FilaPedidos = () => {
             }
             const data = await response.json();
             
-            // Ordenação FIFO (mais antigo primeiro)
             const sortedData = data.sort((a, b) => new Date(a.data_pedido) - new Date(b.data_pedido));
 
             const pedidosFormatados = sortedData.map(pedido => ({
@@ -232,7 +224,7 @@ const FilaPedidos = () => {
         } finally {
             if(isLoading) setIsLoading(false);
         }
-    }, [navigate, isLoading]); // Adicionado isLoading
+    }, [navigate, isLoading]); 
 
     useEffect(() => {
         setIsLoading(true); 
@@ -304,7 +296,7 @@ const FilaPedidos = () => {
             if (statusResponse.ok) {
                 setSuccessModalMessage(mensagemSucessoParaModal);
                 setIsSuccessModalOpen(true);
-                // A atualização da lista agora é feita no handleCloseSuccessModal ou pelo intervalo
+                
             } else {
                 const errorData = await statusResponse.json().catch(() => ({detail: "Erro desconhecido"}));
                 alert(`Erro ao atualizar status: ${errorData.detail || statusResponse.statusText}`);
@@ -319,8 +311,8 @@ const FilaPedidos = () => {
         const deveNavegar = successModalMessage.includes("Pronto para Entrega") || successModalMessage.includes("Retirada");
         setSuccessModalMessage('');
         
-        setIsLoading(true); // Força recarregar para atualizar as colunas
-        fetchPedidosDaFila().finally(() => { // Garante que o loading é desativado após o fetch
+        setIsLoading(true); 
+        fetchPedidosDaFila().finally(() => { 
             if (deveNavegar) {
                 navigate('/entrega-retirada');
             }
@@ -330,7 +322,6 @@ const FilaPedidos = () => {
     const pedidosRecebidos = allFetchedPedidos.filter(p => p.statusOriginal === 'Recebido');
     const pedidosEmPreparo = allFetchedPedidos.filter(p => p.statusOriginal === 'Em Preparo');
 
-    // Estilos
     const pageStyle = { backgroundColor: '#E9E9E9', minHeight: '100vh', paddingBottom: '2rem', display: 'flex', flexDirection: 'column' };
     const h2Style = { width: '100%', textAlign: 'center', marginTop: '3rem', marginBottom: '1rem', fontWeight: 700, fontSize: '2.5rem', color: '#333' };
     const twoColumnLayoutContainerStyle = { display: 'flex', flexDirection: 'row', gap: '2rem', width: '95%', maxWidth: '1400px', margin: '2rem auto', flexGrow: 1 };
@@ -352,7 +343,6 @@ const FilaPedidos = () => {
         <div style={pageStyle}>
             <Navbar /> 
             <h2 style={h2Style}>Fila de Pedidos</h2>
-            {/* Mostra erro de atualização mesmo que haja pedidos, mas não se o modal de sucesso estiver aberto */}
             {error && !isSuccessModalOpen && <p style={{textAlign: 'center', color: 'red', marginBottom: '1rem'}}>Erro ao buscar atualizações: {error}</p>}
             
             <div style={twoColumnLayoutContainerStyle}>
@@ -363,7 +353,7 @@ const FilaPedidos = () => {
                             <p style={{ fontSize: '1.1rem', color: '#555' }}>Nenhum pedido recebido aguardando preparo.</p>
                         ) : (
                             pedidosRecebidos.map((pedido) => (
-                                <PedidoCardFila // Nome do componente do card
+                                <PedidoCardFila 
                                     key={pedido.id}
                                     pedido={pedido}
                                     onAvancarStatus={() => handleAvancarStatusPedido(pedido.id, pedido.statusOriginal, pedido.tipo_entrega)}
@@ -383,7 +373,7 @@ const FilaPedidos = () => {
                             <p style={{ fontSize: '1.1rem', color: '#555' }}>Nenhum pedido em preparação no momento.</p>
                         ) : (
                             pedidosEmPreparo.map((pedido) => (
-                                <PedidoCardFila // Nome do componente do card
+                                <PedidoCardFila 
                                     key={pedido.id}
                                     pedido={pedido}
                                     onAvancarStatus={() => handleAvancarStatusPedido(pedido.id, pedido.statusOriginal, pedido.tipo_entrega)}
