@@ -81,14 +81,7 @@ class Bebida(models.Model):
 
     def __str__(self):
         return f"{self.sabor} ({self.get_tamanho_display()})"
-
-class TaxaEntrega(models.Model):
-    local = models.CharField(max_length=100, unique=True) 
-    valor = models.DecimalField(max_digits=6, decimal_places=2)
-
-    def __str__(self):
-        return f"Taxa para {self.local}: R$ {self.valor}"
-
+        
 class Cupom(models.Model):
     codigo = models.CharField(max_length=50, unique=True, help_text="Código do cupom (ex: PROMO10)")
     percentual_desconto = models.DecimalField(max_digits=5, decimal_places=2, help_text="Desconto em porcentagem (ex: 10 para 10%)") 
@@ -119,7 +112,7 @@ class Pedido(models.Model):
         ('Retirada', 'Retirada no Local'), # Alterado de 'Delivery' para 'Retirada' para consistência
     ]
     FORMA_PAGAMENTO_CHOICES = [
-        ('Cartao Credito', 'Cartão de Crédito'),
+        ('Cartao Credito', 'Cartão de Crédito',),
         ('Cartao Debito', 'Cartão de Débito'),
         ('PIX', 'PIX'),
         ('Dinheiro', 'Dinheiro'),

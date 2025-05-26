@@ -137,6 +137,12 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+PIZZARIA_CEP = "70390-030"
+
+GEOAPIFY_API_KEY = "94feb6182b5043228f50c09437deaebd"
+
+ORS_API_KEY = "5b3ce3597851110001cf6248da8d147ea0ea45e6ac3e1659936f0d5b"
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 

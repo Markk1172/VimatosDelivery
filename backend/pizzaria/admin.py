@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Funcionario, Cliente, Motoboy, Pizza, Bebida, TaxaEntrega, Pedido, ItemPedido
+from .models import Funcionario, Cliente, Motoboy, Pizza, Bebida, Pedido, ItemPedido
 
 # Registra o modelo Funcionario para que apareça no admin
 @admin.register(Funcionario)
@@ -37,13 +37,6 @@ class BebidaAdmin(admin.ModelAdmin):
     search_fields = ('sabor',)
     list_filter = ('tamanho',)
 
-# Registra o modelo TaxaEntrega
-@admin.register(TaxaEntrega)
-class TaxaEntregaAdmin(admin.ModelAdmin):
-    list_display = ('local', 'valor')
-    search_fields = ('local',)
-
-# Permite adicionar Itens de Pedido diretamente na tela de Pedido
 class ItemPedidoInline(admin.TabularInline): 
     model = ItemPedido
     extra = 1 # Quantos formulários de item em branco mostrar

@@ -7,6 +7,7 @@ const Navbar = () => {
     const [loggedInUser, setLoggedInUser] = useState(null);
     const [isFuncionario, setIsFuncionario] = useState(false); 
     const navigate = useNavigate();
+    const logoutButtonStyle = { padding: '6px 12px', backgroundColor: '#E04725', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', whiteSpace: 'nowrap', fontWeight: '600', fontSize: '0.9rem'};
 
     useEffect(() => {
         const checkUserStatus = () => {
@@ -111,25 +112,12 @@ const Navbar = () => {
                     </div>
                 )}
             </div>
-
+                
             <div style={authContainerStyle}>
                 {loggedInUser ? (
                     <>
-                        <span style={{ color: '#343a40', whiteSpace: 'nowrap' }}>Olá, {loggedInUser}!</span>
-                        <button
-                            onClick={handleLogout}
-                            style={{
-                                padding: '6px 12px',
-                                backgroundColor: '#E04725',
-                                color: '#fff',
-                                border: 'none',
-                                borderRadius: '4px',
-                                cursor: 'pointer',
-                                whiteSpace: 'nowrap',
-                            }}
-                        >
-                            Sair
-                        </button>
+                        <span style={{ color: '#343a40', whiteSpace: 'nowrap', fontWeight:'500', marginRight: '5px' }}>Olá, {loggedInUser}!</span>
+                        <button style={logoutButtonStyle} onClick={handleLogout}>Sair</button>
                     </>
                 ) : (
                     <Link 
@@ -714,15 +702,6 @@ const Cadastros = () => {
                         </select>
                     </>
                 );
-            case 'entrega': // TaxaEntrega
-                return (
-                    <>
-                        <label>Local de Entrega (Bairro/Região)</label>
-                        <input name="local" value={formData.local || ''} placeholder="Ex: Asa Sul, Lago Norte, Setor Oeste" onChange={handleInputChange} style={inputStyle} required={!editingItemId} readOnly={editingItemId !== null && categoria === 'pizza'} /> 
-                        <label>Valor da Entrega (R$)</label>
-                        <input type="number" name="valor" value={formData.valor || ''} placeholder="Ex: 5.00" step="0.01" onChange={handleInputChange} style={inputStyle} required />
-                    </>
-                );
             default:
                 return null;
         }
@@ -811,7 +790,6 @@ const Cadastros = () => {
                     <option value="funcionario">Funcionário</option>
                     <option value="motoboy">Motoboy</option>
                     <option value="cupom">Cupom de Desconto</option>
-                    <option value="entrega">Taxa de Entrega</option> 
                 </select>
 
                 {categoria && ( 
