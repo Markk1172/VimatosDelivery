@@ -1,63 +1,70 @@
 import React from "react";
 import { useNavigate } from 'react-router-dom';
+import img1 from '../assets/img/portfolio/1.jpg';
+import img2 from '../assets/img/portfolio/10.jpg';
+import img3 from '../assets/img/portfolio/3.jpg';
+import img4 from '../assets/img/portfolio/4.jpg';
+import img5 from '../assets/img/portfolio/5.jpg';
+import img6 from '../assets/img/portfolio/6.jpg';
+import svgCloseIcon from '../assets/img/close-icon.svg';
 
 const portfolioModalsData = [
     {
-        id: "portfolioModal1", 
-        databaseId: 2,          
+        id: "portfolioModal1",
+        databaseId: 2,
         title: "Calabresa",
         subtitle: "Clássica.",
-        img: "/assets/img/portfolio/1.jpg",
+        img: img1,
         description: "Tradicional e irresistível: fatias generosas de calabresa levemente apimentada, cobertas com cebola, orégano fresco e um toque especial do nosso molho artesanal. Assada até a borda ficar crocante e o sabor incomparável.",
         category: "Pizza",
         price: "R$ 42,00"
     },
     {
         id: "portfolioModal2",
-        databaseId: 999, 
+        databaseId: 4,
         title: "Portuguesa",
-        subtitle: "Colonizante não?",
-        img: "/assets/img/portfolio/2.jpg",
-        description: "Uma combinação rica e colorida: presunto, ovo, cebola, pimentão e azeitonas, sobre uma base de queijo e molho caseiro. Uma explosão de sabores que homenageia a tradição.",
+        subtitle: "Vale a pena experimentar.",
+        img: img2,
+        description: "Queijo muçarela derretido, rodelas de tomate vibrante e folhas de manjericão fresco, tudo sobre uma massa clássica e levemente crocante. Uma simplicidade divina que celebra os sabores da Itália.",
         category: "Pizza",
-        price: "R$ 45,00"
+        price: "R$ 40,00"
     },
     {
         id: "portfolioModal3",
-        databaseId: 3,         
+        databaseId: 3,
         title: "Muçarela",
         subtitle: "Básica, mas extraordinária.",
-        img: "/assets/img/portfolio/3.jpg",
+        img: img3,
         description: "Simples, clássica e amada por todos. Coberta com uma generosa camada de muçarela derretida, realçada com um toque de orégano e nosso molho artesanal. Uma explosão de sabor a cada mordida.",
         category: "Pizza",
         price: "R$ 38,00"
     },
     {
         id: "portfolioModal4",
-        databaseId: 7,         
+        databaseId: 7,
         title: "Coca-Cola",
         subtitle: "Refrigerante, sempre uma boa pedida!.",
-        img: "/assets/img/portfolio/4.jpg",
+        img: img4,
         description: "Clássica, refrescante e inconfundível. Servida sempre gelada, é a escolha perfeita para acompanhar qualquer pizza. O equilíbrio ideal entre sabor e efervescência que só a Coca tem.",
         category: "Bebida",
         price: "R$ 7,00"
     },
     {
         id: "portfolioModal5",
-        databaseId: 21,       
+        databaseId: 21,
         title: "Pizza Doce Ovomaltine",
         subtitle: "Doce, incrível e colorida.",
-        img: "/assets/img/portfolio/5.jpg",
+        img: img5,
         description: "Doce na medida certa! Coberta com uma camada cremosa de chocolate ao leite, finalizada com confeitos, é a escolha perfeita para os amantes de sobremesa. Irresistivelmente deliciosa do início ao fim.",
-        category: "Sobremesa", 
+        category: "Sobremesa",
         price: "R$ 55,00"
     },
     {
         id: "portfolioModal6",
-        databaseId: 6,          
+        databaseId: 6,
         title: "Frango com Catupiry",
         subtitle: "Gostosa como nenhuma outra.",
-        img: "/assets/img/portfolio/6.jpg",
+        img: img6,
         description: "Frango desfiado bem temperado coberto com catupiry cremoso, tudo sobre uma base crocante e dourada. Uma mistura perfeita de textura e sabor que conquista todos os paladares.",
         category: "Pizza",
         price: "R$ 46,00"
@@ -68,6 +75,45 @@ function PortfolioModals() {
     const navigate = useNavigate();
 
     const handleAddToCartAndGo = (portfolioItem) => {
+        const accessToken = localStorage.getItem('accessToken');
+        if (!accessToken) {
+            const modalElement = document.getElementById(portfolioItem.id);
+            if (modalElement) {
+                let bsModalInstance = null;
+                if (window.bootstrap && window.bootstrap.Modal) {
+                    bsModalInstance = window.bootstrap.Modal.getInstance(modalElement);
+                }
+
+                if (bsModalInstance && typeof bsModalInstance.hide === 'function') {
+                    const onModalHidden = () => {
+                        modalElement.removeEventListener('hidden.bs.modal', onModalHidden);
+                        document.body.classList.remove('modal-open');
+                        document.body.style.overflow = '';
+                        document.body.style.paddingRight = '';
+                        const backdrops = document.getElementsByClassName('modal-backdrop');
+                        while (backdrops[0]) {
+                            backdrops[0].parentNode.removeChild(backdrops[0]);
+                        }
+                        navigate('/login');
+                    };
+                    modalElement.addEventListener('hidden.bs.modal', onModalHidden);
+                    bsModalInstance.hide();
+                } else {
+                    document.body.classList.remove('modal-open');
+                    document.body.style.overflow = '';
+                    document.body.style.paddingRight = '';
+                    const backdrops = document.getElementsByClassName('modal-backdrop');
+                    while (backdrops[0]) {
+                        backdrops[0].parentNode.removeChild(backdrops[0]);
+                    }
+                    navigate('/login');
+                }
+            } else {
+                navigate('/login');
+            }
+            return;
+        }
+
         const priceString = portfolioItem.price ? portfolioItem.price.replace('R$ ', '').replace(',', '.') : '0';
         const priceNumber = parseFloat(priceString);
 
@@ -82,7 +128,7 @@ function PortfolioModals() {
         }
 
         const cartItem = {
-            id: cartItemId, 
+            id: cartItemId,
             name: portfolioItem.title,
             price: priceNumber,
             quantity: 1,
@@ -127,7 +173,7 @@ function PortfolioModals() {
                     modalElement.addEventListener('hidden.bs.modal', handleModalHidden);
                     modalInstance.hide();
                 } else {
-                    console.warn("Não foi possível obter a instância do modal Bootstrap ou o método 'hide'. Navegando diretamente.");
+                    console.warn("Não foi possível obter a instância do modal Bootstrap ou o método 'hide' ao adicionar ao carrinho. Navegando diretamente.");
                     document.body.classList.remove('modal-open');
                     document.body.style.overflow = '';
                     document.body.style.paddingRight = '';
@@ -138,7 +184,7 @@ function PortfolioModals() {
                     navigate('/carrinho');
                 }
             } else {
-                console.warn(`Elemento do modal com ID ${portfolioItem.id} não encontrado. Navegando diretamente.`);
+                console.warn(`Elemento do modal com ID ${portfolioItem.id} não encontrado ao adicionar ao carrinho. Navegando diretamente.`);
                 navigate('/carrinho');
             }
         } catch (e) {
@@ -157,12 +203,12 @@ function PortfolioModals() {
                     role="dialog"
                     aria-labelledby={`${item.id}Label`}
                     aria-hidden="true"
-                    key={item.id} 
+                    key={item.id}
                 >
                     <div className="modal-dialog modal-xl">
                         <div className="modal-content">
                             <div className="close-modal" data-bs-dismiss="modal" aria-label="Close">
-                                <img src="/assets/img/close-icon.svg" alt="Fechar modal" />
+                                <img src={svgCloseIcon} alt="Fechar modal" />
                             </div>
                             <div className="container">
                                 <div className="row justify-content-center">
@@ -172,7 +218,7 @@ function PortfolioModals() {
                                             <p className="item-intro text-muted">{item.subtitle}</p>
                                             <img
                                                 className="img-fluid d-block mx-auto"
-                                                src={item.img || 'https://via.placeholder.com/700x400.png?text=Imagem+Indispon%C3%ADvel'}
+                                                src={item.img}
                                                 alt={item.title}
                                                 style={{ marginBottom: '2rem', maxHeight: '400px', objectFit: 'contain' }}
                                             />

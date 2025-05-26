@@ -1,40 +1,46 @@
 import React from "react";
+import img1 from '../assets/img/portfolio/1.jpg'; 
+import img2 from '../assets/img/portfolio/10.jpg';
+import img3 from '../assets/img/portfolio/3.jpg';
+import img4 from '../assets/img/portfolio/4.jpg';
+import img5 from '../assets/img/portfolio/5.jpg';
+import img6 from '../assets/img/portfolio/6.jpg';
 
 const portfolioItems = [
   {
     title: "Calabresa",
     subtitle: "Classica, com cebola",
-    img: "assets/img/portfolio/1.jpg",
+    img: img1,
     modal: "#portfolioModal1",
   },
   {
-    title: "Portuguesa",
-    subtitle: "Com ovos, presunto e muito pimentão",
-    img: "assets/img/portfolio/2.jpg",
+    title: "Margherita",
+    subtitle: "Queijo, tomate, orégano e manjericão.",
+    img: img2,
     modal: "#portfolioModal2",
   },
   {
     title: "Muçarela",
     subtitle: "Bem queijuda, oréganoza :)",
-    img: "assets/img/portfolio/3.jpg",
+    img: img3,
     modal: "#portfolioModal3",
   },
   {
     title: "Coca-Cola",
     subtitle: "A inconfundível",
-    img: "/assets/img/portfolio/4.jpg",
+    img: img4,
     modal: "#portfolioModal4",
   },
   {
     title: "Chocolate",
     subtitle: "Saborosa e doce",
-    img: "/assets/img/portfolio/5.jpg",
+    img: img5,
     modal: "#portfolioModal5",
   },
   {
     title: "Frango e Catupiry",
     subtitle: "Deliciosa combinação",
-    img: "/assets/img/portfolio/6.jpg",
+    img: img6,
     modal: "#portfolioModal6",
   },
 ];

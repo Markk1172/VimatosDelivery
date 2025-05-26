@@ -44,7 +44,7 @@ const Login = () => {
         if (data.is_funcionario) {
           navigate('/fila-pedidos');
         } else {
-          navigate('/');
+          navigate('/cardapio');
         }
       } else {
         showMessage(data.error || 'Erro no login. Verifique as suas credenciais.', 'error');
