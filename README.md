@@ -140,11 +140,11 @@ Siga os passos abaixo para configurar e executar o projeto localmente.
 
     ## Integrantes do Grupo - Estudantes do UDF - Brasília - Distrito Federal
 
-* Amanda Beatriz Guimarães Alves - RGM : 38746689 
-* Gabriel Oliveira dos Santos - RGM : 38769662
-* Gustavo Couto Carvalho - RGM : 38410702
-* Marcos Vinícius de Souza Duarte - RGM : 38231590
-* Matheus Araujo dos Santos - RGM : 38387361
-* Raul Acântara da Silva - RGM : 38320771 
-* Victória Kethelen Alves da Silva - RGM : 38386763
+* Amanda Beatriz Guimarães Alves - 
+* Gabriel Oliveira dos Santos - 
+* Gustavo Couto Carvalho - 
+* Marcos Vinícius de Souza Duarte - 
+* Matheus Araujo dos Santos - 
+* Raul Acântara da Silva - 
+* Victória Kethelen Alves da Silva - 
 
