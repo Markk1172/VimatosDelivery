@@ -513,7 +513,7 @@ def buscar_cep_api(request):
 
 # View para calcular a distância de rota entre dois CEPs.
 # Usa as funções auxiliares `_buscar_coordenadas` e `_calcular_distancia_rota`.
-# Acessível apenas por funcionários.
+# Acessível apenas por funcionários logados.
 @api_view(['POST'])
 @permission_classes([IsAuthenticated, IsFuncionario])
 def calcular_rota(request):
